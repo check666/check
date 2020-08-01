@@ -1,3 +1,5 @@
+__author__ == "Jeff Yan"
+
 import pygame, sys, random
 from math import *
 from cycle import *
