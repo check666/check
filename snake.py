@@ -27,7 +27,7 @@ class Snake:
     def __init__(self, game):
         self.game = game
         self.width = 10
-        self.speed = 10
+        self.speed = 5
         self.segments = []
         self.direction = 0
         self.poly_points = []
@@ -35,10 +35,12 @@ class Snake:
         self.seg_width = []
         self.position = [0, 0]
         self.turn_limit = pi/3
+        self.outofbound = False
 
         self.level = 1
         self.current_exp = 0
         self.hp = 100
+        self.dead = False
 
         self.hit_points = []
 
@@ -64,6 +66,8 @@ class Snake:
         self.position[1] += dy
 
     def grow(self):
+        self.add_head_segment()
+        self.increase_length()
         self.add_head_segment()
         self.increase_length()
 
@@ -95,6 +99,12 @@ class Snake:
             self.level += 1
             self.grow()
             self.current_exp = 0
+
+        if self.outofbound:
+            self.hp -= 1
+
+        if self.hp < 0:
+            self.dead = True
 
     def draw(self):
         pygame.draw.polygon(screen, (255, 255, 255), self.poly_points)

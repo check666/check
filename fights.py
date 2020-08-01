@@ -24,17 +24,15 @@ class Beam:
 
     def collide_with(self, snake):
         if self.direction == "v":
-            for i in range(len(snake.hit_points)-1):
-                if snake.hit_points[i][0] <= self.pos[0] <= snake.hit_points[i+1][0]:
-                    return True
-                elif snake.hit_points[i][0] >= self.pos[0] >= snake.hit_points[i+1][0]:
+            for i in range(0, len(snake.hit_points)-2, 2):
+                if not(self.pos[0] - self.width > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
+                        self.pos[0] + self.width < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
                     return True
 
         elif self.direction == "h":
-            for i in range(len(snake.hit_points)-1):
-                if snake.hit_points[i][1] <= self.pos[1] <= snake.hit_points[i+1][1]:
-                    return True
-                elif snake.hit_points[i][1] >= self.pos[1] >= snake.hit_points[i+1][1]:
+            for i in range(0, len(snake.hit_points)-2, 2):
+                if not (self.pos[1] - self.width > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
+                        self.pos[1] + self.width < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
                     return True
         return False
 

@@ -1,5 +1,3 @@
-__author__ == "Jeff Yan"
-
 import pygame, sys, random
 from math import *
 from cycle import *
@@ -25,7 +23,10 @@ def load(n):
     return pygame.image.load("texture\\" + n + ".png").convert_alpha()
 
 
-texture_names = ["close_snake_1", "close_snake_2", "mouse_click", "exp_bar", "hp_bar"]
+texture_names = ["close_snake_1", "close_snake_2", "mouse_click", "exp_bar", "hp_bar", "continue_button",
+                 "help_button", "plan", "settings_button", "start_button", "title", "title_shadow",
+                 "continue_button_hovered", "start_button_hovered", "danger", "level_c", "level_d",
+                 "level_p", "level_s", "menu_route"]
 
 texture_lib = {}
 

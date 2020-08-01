@@ -17,7 +17,52 @@ class Map:
         self.deme = [300, 300]
         self.snake = None
         self.attacks = []
-        self.add_beam([0, -300], 600, "v", 40)
+        self.add_beam([0, -300], 600, "v", width=200)
+
+        self.boarder_cycle = ReCycle(6, 1)
+
+    def draw_boarder(self, offset):
+        c = self.boarder_cycle.get()
+        pygame.draw.line(screen, (255, 255, 255),
+                         (-self.deme[0] + offset[0] + c, -self.deme[1] + offset[1]),
+                         (-self.deme[0] + offset[0] + c, self.deme[1] + offset[1]), 2)
+        pygame.draw.line(screen, (255, 255, 255),
+                         (-self.deme[0] + offset[0] - c, -self.deme[1] + offset[1]),
+                         (-self.deme[0] + offset[0] - c, self.deme[1] + offset[1]), 2)
+
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0] + c, -self.deme[1] + offset[1]),
+                         (self.deme[0] + offset[0] + c, self.deme[1] + offset[1]), 2)
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0] - c, -self.deme[1] + offset[1]),
+                         (self.deme[0] + offset[0] - c, self.deme[1] + offset[1]), 2)
+
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0], self.deme[1] + offset[1] + c),
+                         (-self.deme[0] + offset[0], self.deme[1] + offset[1] + c), 2)
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0], self.deme[1] + offset[1] - c),
+                         (-self.deme[0] + offset[0], self.deme[1] + offset[1] - c), 2)
+
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0], -self.deme[1] + offset[1] + c),
+                         (-self.deme[0] + offset[0], -self.deme[1] + offset[1] + c), 2)
+        pygame.draw.line(screen, (255, 255, 255),
+                         (self.deme[0] + offset[0], -self.deme[1] + offset[1] - c),
+                         (-self.deme[0] + offset[0], -self.deme[1] + offset[1] - c), 2)
+
+        pygame.draw.rect(screen, (255, 255, 255),
+                         pygame.Rect(offset[0] - self.deme[0] - 15, offset[1] - self.deme[1] - 15, 30,
+                                     30))
+        pygame.draw.rect(screen, (255, 255, 255),
+                         pygame.Rect(offset[0] + self.deme[0] - 15, offset[1] - self.deme[1] - 15, 30,
+                                     30))
+        pygame.draw.rect(screen, (255, 255, 255),
+                         pygame.Rect(offset[0] - self.deme[0] - 15, offset[1] + self.deme[1] -15, 30,
+                                     30))
+        pygame.draw.rect(screen, (255, 255, 255),
+                         pygame.Rect(offset[0] + self.deme[0] - 15, offset[1] + self.deme[1] - 15, 30,
+                                     30))
 
     def add_beam(self, position, length, direction, width=30):
         self.attacks.append(Beam(position, length, direction, width))
@@ -29,7 +74,7 @@ class Map:
         self.walls.append(Wall(x, y, w, h))
 
     def draw_background(self, offset):
-        pygame.draw.rect(screen, (50, 50, 50),
+        pygame.draw.rect(screen, (70, 70, 70),
                          pygame.Rect(offset[0] - self.deme[0], offset[1] - self.deme[1], self.deme[0] * 2,
                                      self.deme[1] * 2))
 
@@ -40,6 +85,11 @@ class Map:
             self.exp_balls[i].draw(offset)
         for i in range(len(self.attacks) - 1, -1, -1):
             self.attacks[i].draw(offset)
+
+        if self.snake.outofbound:
+            screen.blit(texture_lib["danger"], (0, 0))
+
+        self.draw_boarder(offset)
 
     def update(self):
         for i in range(len(self.exp_balls)-1, -1, -1):
@@ -55,9 +105,17 @@ class Map:
             if self.attacks[i].dead:
                 del self.attacks[i]
 
-        if len(self.exp_balls) < 10:
+        if len(self.exp_balls) < 3:
             self.exp_balls.append(ExpBall((random.randint(-self.deme[0], self.deme[0]),
                                            random.randint(-self.deme[1], self.deme[1]))))
+
+        if (self.snake.position[0] < -self.deme[0] or
+                self.snake.position[0] > self.deme[0] or
+                self.snake.position[1] < -self.deme[1] or
+                self.snake.position[1] > self.deme[1]):
+            self.snake.outofbound = True
+        else:
+            self.snake.outofbound = False
 
         if not self.attacks:
             self.add_beam([0, -300], 600, "v", 40)

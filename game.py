@@ -1,10 +1,11 @@
 from snake import *
 from map import *
 from hud import *
+from menu import *
 
 class Game:
     def __init__(self):
-        self.snake_move_cycle = Cycle(2, 0)
+        self.snake_move_cycle = Cycle(2, 1)
 
         self.map = map1
 
@@ -13,6 +14,8 @@ class Game:
         self.scene = None
 
         self.info_hud = None
+
+        self.menu = None
 
     def get_offset(self):
         return -int(self.snake.position[0] - screen_width/2), -int(self.snake.position[1] - screen_height/2)
@@ -29,7 +32,9 @@ class Game:
         self.update()
 
     def draw(self):
-        if not self.scene:
+        if self.menu:
+            self.menu.draw()
+        elif not self.scene:
             self.map.draw_background(self.get_offset())
             self.snake.draw()
             self.map.draw(self.get_offset())
@@ -45,7 +50,9 @@ class Game:
             self.scene.handle_event(event)
 
     def update(self):
-        if not self.scene:
+        if self.menu:
+            self.menu.update()
+        elif not self.scene:
             self.snake.set_direction(env["mouse_direction"])
 
             self.map.update()

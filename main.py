@@ -22,4 +22,4 @@ while True:
     g.draw()
     pygame.display.flip()
 
-    clock.tick(30)
+    clock.tick(50)

@@ -22,3 +22,32 @@ class Cycle:
     def reset(self):
         self.tick = 0
         self.current = 0
+
+class ReCycle:
+    def __init__(self, num, speed, start=0):
+        self.tick = 0
+        self.current = start
+        self.speed = speed
+        self.num = num
+        self.one = False
+        self.v = 1
+        self.prev = self.current
+
+    def get(self):
+        self.tick += 1
+        if self.tick > self.speed:
+            self.tick = 0
+            self.prev = self.current
+            self.current += self.v
+            if self.current >= self.num:
+                self.current = self.num - 1
+                self.v = -1
+                self.one = True
+            elif self.current < 0:
+                self.current = 0
+                self.v = 1
+        return  self.current
+
+    def reset(self):
+        self.tick = 0
+        self.current = 0
