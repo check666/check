@@ -70,8 +70,11 @@ class MainMenu:
             for i in range(len(self.point_set1)-1):
                 pygame.draw.line(screen, (255, 255, 255), self.point_set1[i].get(), self.point_set1[i+1].get())
 
-class LevelSelect:
+    def handle_event(self, event):
+        pass
 
+
+class LevelSelect:
     status_texture = (texture_lib["level_d"], texture_lib["level_p"], texture_lib["level_c"], texture_lib["level_s"])
     def __init__(self):
         self.float_cycle = ReCycle(6, 4)
@@ -114,3 +117,10 @@ class LevelSelect:
                     if self.level_points[i][1] + self.c_float < env["mouse_y"] \
                             < self.level_points[i][1] + 33 + self.c_float:
                         self.point_status[i] = 3
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONUP:
+            for i in range(len(self.point_status)):
+                if self.point_status[i] == 3:
+                    return i
+        return -1

@@ -1,23 +1,22 @@
 from config import *
 from fights import *
 
-class Wall:
-    def __init__(self, x, y, w, h):
-        self.pos = [x, y]
-        self.deme = [w, h]
-
-    def draw(self, offset):
-        pygame.draw.rect(screen, (100, 100, 100), pygame.Rect((self.pos[0] + offset[0], self.pos[1] + offset[1])
-                                                              , self.deme), 4)
-
-class Map:
+class Level:
     def __init__(self):
-        self.walls = []
+        pass
+
+    def is_passed(self):
+        return False
+
+class Map(Level):
+    def __init__(self):
+        Level.__init__(self)
+        self.objects = []
         self.exp_balls = []
         self.deme = [300, 300]
         self.snake = None
         self.attacks = []
-        self.add_beam([0, -300], 600, "v", width=200)
+        self.food_count = 5
 
         self.boarder_cycle = ReCycle(6, 1)
 
@@ -67,11 +66,11 @@ class Map:
     def add_beam(self, position, length, direction, width=30):
         self.attacks.append(Beam(position, length, direction, width))
 
+    def add_bullet(self, position, speed, radius, damage):
+        self.attacks.append(Bullet(damage, radius, position[0], position[1], speed[0], speed[1]))
+
     def set_snake(self, snake):
         self.snake = snake
-
-    def add_wall(self, x, y, w, h):
-        self.walls.append(Wall(x, y, w, h))
 
     def draw_background(self, offset):
         pygame.draw.rect(screen, (70, 70, 70),
@@ -79,12 +78,12 @@ class Map:
                                      self.deme[1] * 2))
 
     def draw(self, offset):
-        for i in range(len(self.walls)-1, -1, -1):
-            self.walls[i].draw(offset)
         for i in range(len(self.exp_balls)-1, -1, -1):
             self.exp_balls[i].draw(offset)
         for i in range(len(self.attacks) - 1, -1, -1):
             self.attacks[i].draw(offset)
+        for i in range(len(self.objects) - 1, -1, -1):
+            self.objects[i].draw(offset)
 
         if self.snake.outofbound:
             screen.blit(texture_lib["danger"], (0, 0))
@@ -102,10 +101,21 @@ class Map:
             if self.attacks[i].attack:
                 if self.attacks[i].collide_with(self.snake):
                     self.snake.hp -= self.attacks[i].damage
+            if self.attacks[i].bounded:
+                if self.attacks[i].pos[0] > self.deme[0] or \
+                     self.attacks[i].pos[0] < -self.deme[0] or \
+                     self.attacks[i].pos[1] > self.deme[1] or \
+                     self.attacks[i].pos[1] < -self.deme[1]:
+                    self.attacks[i].dead = True
             if self.attacks[i].dead:
                 del self.attacks[i]
 
-        if len(self.exp_balls) < 3:
+        for i in range(len(self.objects)-1, -1, -1):
+            self.objects[i].update()
+            if self.objects[i].dead:
+                del self.objects[i]
+
+        if len(self.exp_balls) < self.food_count:
             self.exp_balls.append(ExpBall((random.randint(-self.deme[0], self.deme[0]),
                                            random.randint(-self.deme[1], self.deme[1]))))
 
@@ -117,7 +127,35 @@ class Map:
         else:
             self.snake.outofbound = False
 
-        if not self.attacks:
-            self.add_beam([0, -300], 600, "v", 40)
+class Level1(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 200
+        self.deme[1] = 200
 
-map1 = Map()
+    def is_passed(self):
+        if self.snake.level >= 3:
+            return True
+        return False
+
+class Level2(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 250
+        self.deme[1] = 250
+
+        self.objects.append(OneCanon((-310, 100)))
+        self.objects.append(OneCanon((-310, -100)))
+
+    def is_passed(self):
+        if self.snake.level >= 5:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)
+        if self.objects[0].cast:
+            self.add_bullet((self.objects[0].pos[0]+70, self.objects[0].pos[1]+40), (5, 0), 15, 10)
+        if self.objects[1].cast:
+            self.add_bullet((self.objects[1].pos[0]+70, self.objects[1].pos[1]+40), (5, 0), 15, 10)
+

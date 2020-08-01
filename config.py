@@ -4,7 +4,7 @@ from cycle import *
 
 pygame.init()
 
-env = {"mouse_direction": 0, "mouse_x": 0, "mouse_y": 0}
+env = {"mouse_direction": 0, "mouse_x": 0, "mouse_y": 0, "mouse_down": False}
 
 screen_width, screen_height = 600, 400
 screen = pygame.display.set_mode((screen_width, screen_height))

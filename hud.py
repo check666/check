@@ -11,7 +11,7 @@ class InfoBar:
     def update(self):
         self.level_text = chat_font.render("Lv." + str(self.snake.level), False, (255, 255, 255))
         if self.hp_lag > self.snake.hp*3:
-            self.hp_lag -= 5
+            self.hp_lag -= 2
         else:
             self.hp_lag = self.snake.hp*3
 

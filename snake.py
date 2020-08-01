@@ -27,7 +27,7 @@ class Snake:
     def __init__(self, game):
         self.game = game
         self.width = 10
-        self.speed = 5
+        self.speed = 7
         self.segments = []
         self.direction = 0
         self.poly_points = []

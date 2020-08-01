@@ -7,7 +7,7 @@ class Game:
     def __init__(self):
         self.snake_move_cycle = Cycle(2, 1)
 
-        self.map = map1
+        self.map = Level1()
 
         self.snake = None
 
@@ -24,6 +24,7 @@ class Game:
         self.scene = scene
 
     def start(self):
+        self.map = Level2()
         self.snake = Snake(self)
         for _ in range(5):
             self.snake.grow()
@@ -44,7 +45,12 @@ class Game:
             self.scene.draw()
 
     def handle_event(self, event):
-        if not self.scene:
+        if self.menu:
+            result = self.menu.handle_event(event)
+            if result != -1:
+                self.start()
+                self.menu = None
+        elif not self.scene:
             pass
         else:
             self.scene.handle_event(event)
@@ -62,6 +68,9 @@ class Game:
             self.snake.update()
 
             self.info_hud.update()
+
+            if self.map.is_passed():
+                self.menu = LevelSelect()
         else:
             self.scene.update()
             if self.scene.is_ended():
