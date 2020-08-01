@@ -71,4 +71,46 @@ class MainMenu:
                 pygame.draw.line(screen, (255, 255, 255), self.point_set1[i].get(), self.point_set1[i+1].get())
 
 class LevelSelect:
-    pass
+
+    status_texture = (texture_lib["level_d"], texture_lib["level_p"], texture_lib["level_c"], texture_lib["level_s"])
+    def __init__(self):
+        self.float_cycle = ReCycle(6, 4)
+        self.level_float = ReCycle(6, 2)
+        self.level_points = ((46, 144), (134, 227), (290, 202), (412, 274))
+
+        self.point_status = [0 for _ in range(9)]
+        self.point_status[0] = 2
+
+        self.c_float = 0
+
+        self.current_level = 0
+
+        self.next_level()
+        self.next_level()
+
+    def next_level(self):
+        self.point_status[self.current_level] = 1
+        self.current_level += 1
+        self.point_status[self.current_level] = 2
+
+    def draw(self):
+        screen.blit(texture_lib["menu_route"], (0, self.c_float))
+        for i in range(len(self.level_points)):
+            screen.blit(self.status_texture[self.point_status[i]], (self.level_points[i][0],
+                                                 self.level_points[i][1] + self.c_float))
+            if self.point_status[i] == 3:
+                screen.blit(texture_lib["level_base"], (self.level_points[i][0] + 7,
+                                                 self.level_points[i][1] + self.c_float + self.level_float.get() - 75))
+
+    def update(self):
+        self.c_float = self.float_cycle.get()
+        for i in range(len(self.level_points)):
+            if self.point_status[i] != 0:
+                if i == self.current_level:
+                    self.point_status[i] = 2
+                else:
+                    self.point_status[i] = 1
+                if self.level_points[i][0] < env["mouse_x"] < self.level_points[i][0] + 75:
+                    if self.level_points[i][1] + self.c_float < env["mouse_y"] \
+                            < self.level_points[i][1] + 33 + self.c_float:
+                        self.point_status[i] = 3

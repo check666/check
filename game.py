@@ -15,7 +15,7 @@ class Game:
 
         self.info_hud = None
 
-        self.menu = None
+        self.menu = LevelSelect()
 
     def get_offset(self):
         return -int(self.snake.position[0] - screen_width/2), -int(self.snake.position[1] - screen_height/2)

@@ -1,4 +1,4 @@
-import pygame, sys, random
+import pygame, sys, random, os
 from math import *
 from cycle import *
 
@@ -14,19 +14,20 @@ chat_font = pygame.font.Font("sanji.ttf", chat_font_size)
 
 clock = pygame.time.Clock()
 
+
 def get_distance(p1, p2):
     d1, d2 = p1[0] - p2[0], p1[1] - p2[1]
     return sqrt(d1*d1 + d2*d2)
 
 
+textures = os.listdir("texture")
+
+
 def load(n):
-    return pygame.image.load("texture\\" + n + ".png").convert_alpha()
+    return pygame.image.load(os.path.join("texture", n + ".png")).convert_alpha()
 
 
-texture_names = ["close_snake_1", "close_snake_2", "mouse_click", "exp_bar", "hp_bar", "continue_button",
-                 "help_button", "plan", "settings_button", "start_button", "title", "title_shadow",
-                 "continue_button_hovered", "start_button_hovered", "danger", "level_c", "level_d",
-                 "level_p", "level_s", "menu_route"]
+texture_names = [name[:-4] for name in textures]
 
 texture_lib = {}
 
