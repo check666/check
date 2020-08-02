@@ -288,3 +288,63 @@ class Level6(Map):
                 else:
                     self.current_attack_pos = (150, -300)
                 self.animations.append(Charge(self.current_attack_pos, 150, 600, 20))
+
+class Level7(Map):
+    def __init__(self, game):
+        Map.__init__(self, game)
+        self.deme[0] = 400
+        self.deme[1] = 400
+        self.per_exp = 20
+
+        self.current_wave = ((300, -400), (100, -400), (-100, -400), (-300, -400), "v")
+        self.attacking = True
+        self.attack_tick = 0
+        self.attack_speed = 10
+
+        self.attack_cycle = Cycle(120, 0)
+
+    def is_passed(self):
+        if self.snake.level >= 10:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)
+        if self.attacking:
+            self.attack_tick += 1
+            if self.attack_tick == self.attack_speed:
+                self.attacks.append(Beam(self.current_wave[0], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+            elif self.attack_tick == self.attack_speed*2:
+                self.attacks.append(Beam(self.current_wave[1], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+            elif self.attack_tick == self.attack_speed*3:
+                self.attacks.append(Beam(self.current_wave[2], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+            elif self.attack_tick == self.attack_speed*4:
+                self.attacks.append(Beam(self.current_wave[3], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+            elif self.attack_tick > self.attack_speed * 4:
+                self.attacking = False
+                self.attack_tick = 0
+        elif self.attack_cycle.get() == 0:
+            self.attacking = True
+            mode = random.randint(1, 4)
+            if mode == 1:
+                self.current_wave = ((300, -400), (100, -400), (-100, -400), (-300, -400), "v")
+            elif mode == 2:
+                self.current_wave = ((-300, -400), (-100, -400), (100, -400), (300, -400), "v")
+            elif mode == 3:
+                self.current_wave = ((-400, -300), (-400, -100), (-400, 100), (-400, 300), "h")
+            elif mode == 4:
+                self.current_wave = ((-400, 300), (-400, 100), (-400, -100), (-400, -300), "h")
+
+class Level8(Map):
+    def __init__(self, game):
+        Map.__init__(self, game)
+        self.deme[0] = 400
+        self.deme[1] = 400
+        self.per_exp = 101
+        self.food_count = 20
+
+    def is_passed(self):
+        return False
+
+    def update(self):
+        Map.update(self)
