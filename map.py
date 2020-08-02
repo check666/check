@@ -21,6 +21,8 @@ class Map(Level):
 
         self.boarder_cycle = ReCycle(6, 1)
 
+        self.animations = []
+
     def draw_boarder(self, offset):
         c = self.boarder_cycle.get()
         pygame.draw.line(screen, (255, 255, 255),
@@ -85,6 +87,8 @@ class Map(Level):
             self.attacks[i].draw(offset)
         for i in range(len(self.objects) - 1, -1, -1):
             self.objects[i].draw(offset)
+        for i in range(len(self.animations)-1, -1, -1):
+            self.animations[i].draw()
 
         if self.snake.outofbound:
             screen.blit(texture_lib["danger"], (0, 0))
@@ -96,6 +100,12 @@ class Map(Level):
             if get_distance(self.snake.position, self.exp_balls[i].pos) < 20:
                 self.snake.current_exp += self.exp_balls[i].points
                 del self.exp_balls[i]
+
+        for i in range(len(self.animations) - 1, -1, -1):
+            if self.animations[i].dead:
+                del self.animations[i]
+            else:
+                self.animations[i].update()
 
         for i in range(len(self.attacks)-1, -1, -1):
             self.attacks[i].update()
@@ -225,3 +235,37 @@ class Level4(Map):
                 elif generated == 7:
                     self.objects.append(MovingBeamCannon((0, -350), "v", -1, 350, 700))
                     self.attacks.append(self.objects[-1].get_beam())
+
+class Level5(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 400
+        self.deme[1] = 400
+        self.per_exp = 20
+
+        self.attacks.append(CenterSlice(1, 0.005, 400))
+
+    def is_passed(self):
+        if self.snake.level >= 10:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)
+
+class Level6(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 400
+        self.deme[1] = 400
+        self.per_exp = 20
+
+        self.animations.append(Cha)
+
+    def is_passed(self):
+        if self.snake.level >= 10:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)

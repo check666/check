@@ -19,6 +19,8 @@ def get_distance(p1, p2):
     d1, d2 = p1[0] - p2[0], p1[1] - p2[1]
     return sqrt(d1*d1 + d2*d2)
 
+def get_angle(x, y):
+    return atan2(y, x)
 
 textures = os.listdir("texture")
 

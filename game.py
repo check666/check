@@ -24,7 +24,7 @@ class Game:
         self.scene = scene
 
     def start(self):
-        self.map = Level4()
+        self.map = Level5()
         self.snake = Snake(self)
         for _ in range(5):
             self.snake.grow()

@@ -1,5 +1,7 @@
 from config import *
 
+from animations import *
+
 class Obstacles:
     def __init__(self):
         self.damage = 0
@@ -321,29 +323,51 @@ class MovingBeamCannon:
             screen.blit(texture_lib["line_left"], (self.pos[0] + offset[0] + self.height - 40, self.pos[1] + offset[1] - 40))
 
 class CenterSlice(Obstacles):
-    def __init__(self, damage, radius, speed):
+    def __init__(self, damage, speed, boxed):
         Obstacles.__init__(self)
+        self.boxed = boxed
         self.damage = damage
-        self.radius = radius
-        self.angle = 0
+        self.radius = boxed*1.414
+
+        self.angle = 0.0
         self.speed = speed
         self.pos = [0, 0]
         self.bounded = False
-
-        self.attack = False
+        self.attack = True
         self.dead_on_collide = False
+        self.shade = 0.05
+
+        self.current_rise = [0, 0, 0, 0]
+        self.attack = True
 
     def update(self):
-        self.pos[0] += self.speed[0]
-        self.pos[1] += self.speed[1]
+        self.angle += self.speed
+        if self.angle > pi:
+            self.angle -= 2 * pi
+        self.current_rise[0] = cos(self.angle - self.shade) * self.radius
+        self.current_rise[1] = sin(self.angle - self.shade) * self.radius
+        self.current_rise[2] = cos(self.angle + self.shade) * self.radius
+        self.current_rise[3] = sin(self.angle + self.shade) * self.radius
 
     def draw(self, offset):
-        pygame.draw.circle(screen, (170, 0, 0), (self.pos[0] + offset[0], self.pos[1] + offset[1]), self.radius)
+        pygame.draw.polygon(screen, (170, 0, 0),
+                            ((-self.current_rise[0] + offset[0], -self.current_rise[1] + offset[1]),
+                             (self.current_rise[0] + offset[0], self.current_rise[1] + offset[1]),
+                             (self.current_rise[2] + offset[0], self.current_rise[3] + offset[1]),
+                             (-self.current_rise[2] + offset[0], -self.current_rise[3] + offset[1])))
+
+        pygame.draw.polygon(screen, (170, 0, 0),
+                            ((-self.current_rise[1] + offset[0], self.current_rise[0] + offset[1]),
+                             (self.current_rise[1] + offset[0], -self.current_rise[0] + offset[1]),
+                             (self.current_rise[3] + offset[0], -self.current_rise[2] + offset[1]),
+                             (-self.current_rise[3] + offset[0], self.current_rise[2] + offset[1])))
 
     def collide_with(self, snake):
         for i in range(0, len(snake.hit_points), 2):
-            if get_distance(snake.hit_points[i], self.pos) < snake.width + self.radius - 3:
-                if self.dead_on_collide:
-                    self.dead = True
-                return True
+            for l in range(4):
+                diff = self.angle + (l*pi/2) - get_angle(snake.hit_points[i][0], snake.hit_points[i][1])
+                while diff > pi:
+                    diff -= pi * 2
+                if -self.shade < diff < self.shade:
+                    return True
         return False
