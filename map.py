@@ -17,6 +17,7 @@ class Map(Level):
         self.snake = None
         self.attacks = []
         self.food_count = 5
+        self.per_exp = 10
 
         self.boarder_cycle = ReCycle(6, 1)
 
@@ -117,7 +118,7 @@ class Map(Level):
 
         if len(self.exp_balls) < self.food_count:
             self.exp_balls.append(ExpBall((random.randint(-self.deme[0], self.deme[0]),
-                                           random.randint(-self.deme[1], self.deme[1]))))
+                                           random.randint(-self.deme[1], self.deme[1])), self.per_exp))
 
         if (self.snake.position[0] < -self.deme[0] or
                 self.snake.position[0] > self.deme[0] or
@@ -159,3 +160,68 @@ class Level2(Map):
         if self.objects[1].cast:
             self.add_bullet((self.objects[1].pos[0]+70, self.objects[1].pos[1]+40), (5, 0), 15, 10)
 
+class Level3(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 300
+        self.deme[1] = 300
+        self.per_exp = 20
+
+        self.objects.append(CrossCanon((-40, -40)))
+
+    def is_passed(self):
+        if self.snake.level >= 10:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)
+        if self.objects[0].cast:
+            self.add_beam((-300, 0), 600, "h")
+            self.add_beam((0, -300), 600, "v")
+
+class Level4(Map):
+    def __init__(self):
+        Map.__init__(self)
+        self.deme[0] = 350
+        self.deme[1] = 350
+        self.per_exp = 20
+        self.beam_cycle = Cycle(80, 0)
+
+        self.objects.append(MovingBeamCannon((-350, 0), "h", 1, 350, 700))
+        self.attacks.append(self.objects[-1].get_beam())
+
+    def is_passed(self):
+        if self.snake.level >= 10:
+            return True
+        return False
+
+    def update(self):
+        Map.update(self)
+        if not self.attacks:
+            if self.beam_cycle.get() == 0:
+                generated = random.randint(0, 7)
+                if generated == 0:
+                    self.objects.append(MovingBeamCannon((-350, -350), "h", 1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 1:
+                    self.objects.append(MovingBeamCannon((-350, 0), "h", 1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 2:
+                    self.objects.append(MovingBeamCannon((-350, 350), "h", -1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 3:
+                    self.objects.append(MovingBeamCannon((-350, 0), "h", -1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 4:
+                    self.objects.append(MovingBeamCannon((-350, -350), "v", 1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 5:
+                    self.objects.append(MovingBeamCannon((0, -350), "v", 1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 6:
+                    self.objects.append(MovingBeamCannon((350, -350), "v", -1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
+                elif generated == 7:
+                    self.objects.append(MovingBeamCannon((0, -350), "v", -1, 350, 700))
+                    self.attacks.append(self.objects[-1].get_beam())
