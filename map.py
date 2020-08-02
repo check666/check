@@ -9,8 +9,9 @@ class Level:
         return False
 
 class Map(Level):
-    def __init__(self):
+    def __init__(self, game):
         Level.__init__(self)
+        self.game = game
         self.objects = []
         self.exp_balls = []
         self.deme = [300, 300]
@@ -88,7 +89,7 @@ class Map(Level):
         for i in range(len(self.objects) - 1, -1, -1):
             self.objects[i].draw(offset)
         for i in range(len(self.animations)-1, -1, -1):
-            self.animations[i].draw()
+            self.animations[i].draw(offset)
 
         if self.snake.outofbound:
             screen.blit(texture_lib["danger"], (0, 0))
@@ -139,8 +140,8 @@ class Map(Level):
             self.snake.outofbound = False
 
 class Level1(Map):
-    def __init__(self):
-        Map.__init__(self)
+    def __init__(self, game):
+        Map.__init__(self, game)
         self.deme[0] = 200
         self.deme[1] = 200
 
@@ -150,8 +151,8 @@ class Level1(Map):
         return False
 
 class Level2(Map):
-    def __init__(self):
-        Map.__init__(self)
+    def __init__(self, game):
+        Map.__init__(self, game)
         self.deme[0] = 250
         self.deme[1] = 250
 
@@ -171,8 +172,8 @@ class Level2(Map):
             self.add_bullet((self.objects[1].pos[0]+70, self.objects[1].pos[1]+40), (5, 0), 15, 10)
 
 class Level3(Map):
-    def __init__(self):
-        Map.__init__(self)
+    def __init__(self, game):
+        Map.__init__(self, game)
         self.deme[0] = 300
         self.deme[1] = 300
         self.per_exp = 20
@@ -191,8 +192,8 @@ class Level3(Map):
             self.add_beam((0, -300), 600, "v")
 
 class Level4(Map):
-    def __init__(self):
-        Map.__init__(self)
+    def __init__(self, game):
+        Map.__init__(self, game)
         self.deme[0] = 350
         self.deme[1] = 350
         self.per_exp = 20
@@ -237,8 +238,8 @@ class Level4(Map):
                     self.attacks.append(self.objects[-1].get_beam())
 
 class Level5(Map):
-    def __init__(self):
-        Map.__init__(self)
+    def __init__(self, game):
+        Map.__init__(self, game)
         self.deme[0] = 400
         self.deme[1] = 400
         self.per_exp = 20
@@ -254,13 +255,16 @@ class Level5(Map):
         Map.update(self)
 
 class Level6(Map):
-    def __init__(self):
-        Map.__init__(self)
-        self.deme[0] = 400
-        self.deme[1] = 400
+    def __init__(self, game):
+        Map.__init__(self, game)
+        self.deme[0] = 300
+        self.deme[1] = 300
         self.per_exp = 20
+        self.attacked = True
+        self.current_attack_pos = (-150, -300)
 
-        self.animations.append(Cha)
+        self.attack_countdown = 90
+        self.attack_tick = self.attack_countdown
 
     def is_passed(self):
         if self.snake.level >= 10:
@@ -269,3 +273,18 @@ class Level6(Map):
 
     def update(self):
         Map.update(self)
+
+        if not self.attacked and not self.animations:
+            self.attack_tick = self.attack_countdown
+            self.attacked = True
+            self.attacks.append(Beam(self.current_attack_pos, 600, "v", last_t=10, pre_t=0, width=300, damage=40))
+            self.game.shake("v", 60)
+        elif not self.animations and not self.attacks:
+            self.attack_tick -= 1
+            if self.attack_tick < 0:
+                self.attacked = False
+                if random.randint(0, 1) == 0:
+                    self.current_attack_pos = (-150, -300)
+                else:
+                    self.current_attack_pos = (150, -300)
+                self.animations.append(Charge(self.current_attack_pos, 150, 600, 20))

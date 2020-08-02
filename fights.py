@@ -43,14 +43,14 @@ class Beam(Obstacles):
     def collide_with(self, snake):
         if self.direction == "v":
             for i in range(0, len(snake.hit_points)-2, 2):
-                if not(self.pos[0] - self.width > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
-                        self.pos[0] + self.width < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
+                if not(self.pos[0] - self.width/2 > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
+                        self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
                     return True
 
         elif self.direction == "h":
             for i in range(0, len(snake.hit_points)-2, 2):
-                if not (self.pos[1] - self.width > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
-                        self.pos[1] + self.width < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
+                if not (self.pos[1] - self.width/2 > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
+                        self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
                     return True
         return False
 
@@ -110,14 +110,14 @@ class LastBeam(Obstacles):
     def collide_with(self, snake):
         if self.orientation == "v":
             for i in range(0, len(snake.hit_points)-2, 2):
-                if not(self.pos[0] - self.width > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
-                        self.pos[0] + self.width < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
+                if not(self.pos[0] - self.width/2 > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
+                        self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
                     return True
 
         elif self.orientation == "h":
             for i in range(0, len(snake.hit_points)-2, 2):
-                if not (self.pos[1] - self.width > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
-                        self.pos[1] + self.width < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
+                if not (self.pos[1] - self.width/2 > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
+                        self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
                     return True
         return False
 
