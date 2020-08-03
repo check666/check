@@ -1,17 +1,14 @@
 from game import *
 from scene import *
 
-'''if os.path.exists("save"):
+if os.path.exists("save"):
     f = open("save", "r")
     c_level = int(f.read())
     f.close()
     g = Game(c_level)
 else:
-    g = Game()'''
-g = Game(7)
+    g = Game()
 
-
-#g.start_scene(TalkScene("snake_1", "snake_2", [(1, "哈喽"), (1, "你也好啊"), (2, "我又说一句"), (1, "我再来一句")]))
 
 while True:
     for event in pygame.event.get():

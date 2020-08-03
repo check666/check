@@ -319,7 +319,7 @@ class Level7(Map):
         self.current_wave = ((300, -400), (100, -400), (-100, -400), (-300, -400), "v")
         self.attacking = True
         self.attack_tick = 0
-        self.attack_speed = 10
+        self.attack_speed = 20
 
         self.attack_cycle = Cycle(120, 0)
 

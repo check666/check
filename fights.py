@@ -148,7 +148,7 @@ class LastBeam(Obstacles):
 
     def draw(self, offset):
         if self.tick == self.pre_t + self.last_t:
-            ses[7].playOnce()
+            ses[6].playOnce()
         if self.tick < self.pre_t:
             pygame.draw.line(screen, (255, 100, 100),
                          (self.point1[0] + offset[0], self.point1[1] + offset[1]),
