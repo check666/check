@@ -88,8 +88,10 @@ class MainMenu:
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
             if self.hovered:
+                ses[1].playOnce()
                 return -2
             elif self.con_hovered:
+                ses[1].playOnce()
                 return -3
         return -1
 
@@ -125,6 +127,9 @@ class LevelSelect:
         for i in range(len(self.level_points)):
             screen.blit(self.status_texture[self.point_status[i]], (self.level_points[i][0] - self.scroll,
                                                  self.level_points[i][1] + self.c_float))
+            title = chat_font.render("关卡"+str(i+1), False, (255, 255, 255))
+            screen.blit(title, (self.level_points[i][0] - self.scroll + 10,
+                                                                    self.level_points[i][1] + self.c_float + 35))
             if self.point_status[i] == 3:
                 screen.blit(texture_lib["level_base"], (self.level_points[i][0] + 7 - self.scroll,
                                                  self.level_points[i][1] + self.c_float + self.level_float.get() - 75))
@@ -162,5 +167,6 @@ class LevelSelect:
         if event.type == pygame.MOUSEBUTTONUP:
             for i in range(len(self.point_status)):
                 if self.point_status[i] == 3:
+                    ses[1].playOnce()
                     return i
         return -1

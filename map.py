@@ -106,6 +106,7 @@ class Map(Level):
         for i in range(len(self.exp_balls)-1, -1, -1):
             if get_distance(self.snake.position, self.exp_balls[i].pos) < 20:
                 self.snake.current_exp += self.exp_balls[i].points
+                ses[2].playOnce()
                 del self.exp_balls[i]
 
         for i in range(len(self.animations) - 1, -1, -1):
@@ -180,8 +181,10 @@ class Level2(Map):
         Map.update(self)
         if self.objects[0].cast:
             self.add_bullet((self.objects[0].pos[0]+70, self.objects[0].pos[1]+40), (5, 0), 15, 10)
+            ses[5].playOnce()
         if self.objects[1].cast:
             self.add_bullet((self.objects[1].pos[0]+70, self.objects[1].pos[1]+40), (5, 0), 15, 10)
+            ses[5].playOnce()
 
 class Level3(Map):
     def __init__(self, game):
@@ -293,6 +296,7 @@ class Level6(Map):
             self.attack_tick = self.attack_countdown
             self.attacked = True
             self.attacks.append(Beam(self, self.current_attack_pos, 600, "v", last_t=10, pre_t=0, width=300, damage=40))
+            ses[0].playOnce()
             self.game.shake("v", 60)
         elif not self.animations and not self.attacks:
             self.attack_tick -= 1

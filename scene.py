@@ -94,6 +94,7 @@ class TalkScene:
             if event.type == pygame.MOUSEBUTTONUP:
                 if self.current_chat.stage == 1:
                     self.current_chat.dead = True
+                    ses[7].playOnce()
                 elif self.current_chat.stage == 0:
                     self.current_chat.stage = 1
                     self.current_chat.tick = 0

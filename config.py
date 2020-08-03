@@ -16,6 +16,8 @@ level_font = pygame.font.Font("sanji.ttf", 40)
 
 clock = pygame.time.Clock()
 
+pygame.display.set_caption('SnakeQuest')
+
 def get_distance(p1, p2):
     d1, d2 = p1[0] - p2[0], p1[1] - p2[1]
     return sqrt(d1*d1 + d2*d2)
@@ -46,6 +48,8 @@ class AudioPlayer():
             self.channel = pygame.mixer.Channel(1)
         if type == "se":
             self.channel = pygame.mixer.Channel(2)
+        if type == "sn":
+            self.channel = pygame.mixer.Channel(3)
 
     def playNonStop(self):
         self.channel.play(self.music,-1)
@@ -61,3 +65,12 @@ bgs = (AudioPlayer("menubg", "bg"),
        AudioPlayer("gamebg2", "bg"),
        AudioPlayer("chat", "bg"),
        AudioPlayer("map", "bg", volume=0.06))
+
+ses = (AudioPlayer("sebigcannon", "se"),
+       AudioPlayer("sebutton", "se"),
+       AudioPlayer("seeat", "sn"),
+       AudioPlayer("sehit", "sn"),
+       AudioPlayer("selevelup", "sn"),
+       AudioPlayer("sesmallcannon", "se"),
+       AudioPlayer("sebeam", "se"),
+       AudioPlayer("sechat", "se"))

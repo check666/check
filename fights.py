@@ -48,6 +48,7 @@ class Beam(Obstacles):
                         self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
                     self.map.animations.append(Particle_explode(snake.hit_points[i]))
                     self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
+                    ses[3].playOnce()
                     return True
 
         elif self.direction == "h":
@@ -56,11 +57,16 @@ class Beam(Obstacles):
                         self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
                     self.map.animations.append(Particle_explode(snake.hit_points[i]))
                     self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
+                    ses[3].playOnce()
                     return True
         return False
 
 
     def update(self):
+        if self.tick == self.pre_t:
+            if self.width < 100:
+                ses[6].playOnce()
+
         if self.tick > self.pre_t + self.last_t*2:
             self.dead = True
         else:
@@ -119,6 +125,7 @@ class LastBeam(Obstacles):
                         self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
                     self.map.animations.append(Particle_explode(snake.hit_points[i]))
                     self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
+                    ses[3].playOnce()
                     return True
 
         elif self.orientation == "h":
@@ -127,6 +134,7 @@ class LastBeam(Obstacles):
                         self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
                     self.map.animations.append(Particle_explode(snake.hit_points[i]))
                     self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
+                    ses[3].playOnce()
                     return True
         return False
 
@@ -139,6 +147,8 @@ class LastBeam(Obstacles):
                 self.attack = True
 
     def draw(self, offset):
+        if self.tick == self.pre_t + self.last_t:
+            ses[7].playOnce()
         if self.tick < self.pre_t:
             pygame.draw.line(screen, (255, 100, 100),
                          (self.point1[0] + offset[0], self.point1[1] + offset[1]),
@@ -186,6 +196,7 @@ class Bullet(Obstacles):
                 if self.dead_on_collide:
                     self.dead = True
                 self.map.animations.append(Particle_explode(snake.hit_points[i]))
+                ses[3].playOnce()
                 return True
         return False
 

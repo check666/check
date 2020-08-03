@@ -37,10 +37,12 @@ class Snake:
         self.position = [0, 0]
         self.turn_limit = pi/3
         self.outofbound = False
+        self.color = (255, 255, 255)
 
         self.level = 1
         self.current_exp = 0
         self.hp = 100
+        self.pre_hp = self.hp
         self.dead = False
 
         self.hit_points = []
@@ -97,6 +99,7 @@ class Snake:
             self.poly_points.append(self.segments[i].get_point2(self.game.get_offset()))
 
         if self.current_exp > 100:
+            ses[4].playOnce()
             self.level += 1
             self.grow()
             self.current_exp = 0
@@ -109,8 +112,14 @@ class Snake:
         if self.hp < 0:
             self.dead = True
 
+        if self.pre_hp > self.hp:
+            self.color = (255, 100, 100)
+        else:
+            self.color = (255, 255, 255)
+        self.pre_hp = self.hp
+
     def draw(self):
-        pygame.draw.polygon(screen, (255, 255, 255), self.poly_points)
-        pygame.draw.circle(screen, -1, (int(self.position[0] + self.game.get_offset()[0]),
+        pygame.draw.polygon(screen, self.color, self.poly_points)
+        pygame.draw.circle(screen, self.color, (int(self.position[0] + self.game.get_offset()[0]),
                                         int(self.position[1] + self.game.get_offset()[1])),
                            self.width + 2)
