@@ -1,13 +1,24 @@
 from game import *
 from scene import *
 
-g = Game()
+'''if os.path.exists("save"):
+    f = open("save", "r")
+    c_level = int(f.read())
+    f.close()
+    g = Game(c_level)
+else:
+    g = Game()'''
+g = Game(7)
+
 
 #g.start_scene(TalkScene("snake_1", "snake_2", [(1, "哈喽"), (1, "你也好啊"), (2, "我又说一句"), (1, "我再来一句")]))
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            f = open("save", "w")
+            f.write(str(g.current_level))
+            f.close()
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEMOTION:

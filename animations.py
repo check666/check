@@ -49,3 +49,31 @@ class Charge:
                 self.lines.append(ChargeLine(self.pos, self.width, self.height))
         elif not self.lines:
             self.dead = True
+
+class Particle_explode:
+    def __init__(self, pos):
+        self.cycle = Cycle(4, 2)
+        self.pos = (pos[0] - 25, pos[1] - 25)
+        self.dead = False
+
+    def draw(self, offset):
+        screen.blit(texture_lib["particle_explode"], (self.pos[0] + offset[0], self.pos[1] + offset[1]),
+                    pygame.Rect(0, self.cycle.get()*50, 50, 50))
+
+    def update(self):
+        if self.cycle.one:
+            self.dead = True
+
+class LevelUp:
+    def __init__(self, pos):
+        self.cycle = Cycle(4, 3)
+        self.pos = (pos[0] - 30, pos[1] - 30)
+        self.dead = False
+
+    def draw(self, offset):
+        screen.blit(texture_lib["level_up"], (self.pos[0] + offset[0], self.pos[1] + offset[1]),
+                    pygame.Rect(0, self.cycle.get()*60, 60, 60))
+
+    def update(self):
+        if self.cycle.one:
+            self.dead = True

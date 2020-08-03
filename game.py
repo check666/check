@@ -6,9 +6,9 @@ from chat import *
 from scene import *
 
 class Game:
-    def __init__(self):
+    def __init__(self, current_level=0):
         self.snake_move_cycle = Cycle(2, 1)
-        self.current_level = 0
+        self.current_level = current_level
         self.current_playing = 0
 
         self.map = None
@@ -74,9 +74,10 @@ class Game:
         self.map.set_snake(self.snake)
         self.update()
         self.start_scene(TalkScene("snake_1", "snake_2", level_chats[level-1]))
+        bgs[3].playNonStop()
 
     def draw(self):
-        if self.menu:
+        if not self.scene and self.menu:
             self.menu.draw()
         elif not self.scene:
             self.map.draw_background(self.get_offset())
@@ -85,6 +86,8 @@ class Game:
 
             self.info_hud.draw()
         else:
+            if self.scene.name == "text" or self.scene.name == "level":
+                self.map.draw(self.get_offset())
             self.scene.draw()
 
     def handle_event(self, event):
@@ -95,7 +98,10 @@ class Game:
                     self.current_playing = result
                     self.start(result+1)
                 else:
-                    if result == -2:
+                    if result == -3:
+                        self.menu = LevelSelect(self.current_level)
+                    elif result == -2:
+                        self.current_level = 0
                         self.menu = LevelSelect(self.current_level)
         elif not self.scene:
             pass
@@ -103,7 +109,7 @@ class Game:
             self.scene.handle_event(event)
 
     def update(self):
-        if self.menu:
+        if not self.scene and self.menu:
             self.menu.update()
         elif not self.scene:
             self.snake.set_direction(env["mouse_direction"])
@@ -116,14 +122,26 @@ class Game:
             self.info_hud.update()
             if self.map.is_dead():
                 self.menu = LevelSelect(self.current_level)
-                self.map = None
+                self.scene = TextScene("lose_text")
             elif self.map.is_passed() and self.current_level == self.current_playing:
                 self.current_level += 1
                 self.menu = LevelSelect(self.current_level)
+                self.scene = TextScene("win_text")
+            elif self.map.is_passed():
+                self.menu = LevelSelect(self.current_level)
+                self.scene = TextScene("win_text")
         else:
             self.scene.update()
             if self.scene.is_ended():
-                self.scene = None
+                if self.scene.name == "chat":
+                    m = random.randint(0, 1)
+                    if m == 0:
+                        bgs[1].playNonStop()
+                    else:
+                        bgs[2].playNonStop()
+                    self.scene = LevelNum(self.current_playing+1)
+                else:
+                    self.scene = None
 
         if self.shaking[0]:
             self.shake_countdown[0] -= 1

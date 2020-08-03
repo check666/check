@@ -63,6 +63,7 @@ class ChatBox:
 
 class TalkScene:
     def __init__(self, character1, character2, chats):
+        self.name = "chat"
         self.c1 = "close_" + character1
         self.c2 = "close_" + character2
         self.stage = 0
@@ -128,3 +129,62 @@ class TalkScene:
         else:
             screen.blit(texture_lib[self.c1], (0, 250))
             screen.blit(texture_lib[self.c2], (300, 250))
+
+class TextScene:
+    def __init__(self, texture):
+        self.name = "text"
+        self.tick = 0
+        self.texture = texture
+
+    def is_ended(self):
+        return self.tick >= 150
+
+    def draw(self):
+        if self.tick < 20:
+            screen.blit(texture_lib["result_background"], (30 * self.tick - 600, 0))
+        elif self.tick > 130:
+            screen.blit(texture_lib["result_background"], (30 * (self.tick - 130), 0))
+        else:
+            screen.blit(texture_lib["result_background"], (0, 0))
+            if self.tick < 50:
+                screen.blit(texture_lib[self.texture], ((self.tick-20)*20-600, 0))
+            elif self.tick < 100:
+                screen.blit(texture_lib[self.texture], (0, 0))
+            elif self.tick < 130:
+                screen.blit(texture_lib[self.texture], ((self.tick - 100) * 20, 0))
+
+    def update(self):
+        self.tick += 1
+
+    def handle_event(self, event):
+        pass
+
+class LevelNum:
+    def __init__(self, num):
+        self.name = "level"
+        self.tick = 0
+        self.num = num
+        self.texture = level_font.render("关卡"+str(num), False, (0, 0, 0))
+
+    def is_ended(self):
+        return self.tick >= 150
+
+    def draw(self):
+        if self.tick < 20:
+            screen.blit(texture_lib["result_background"], (30 * self.tick - 600, 0))
+        elif self.tick > 130:
+            screen.blit(texture_lib["result_background"], (30 * (self.tick - 130), 0))
+        else:
+            screen.blit(texture_lib["result_background"], (0, 0))
+            if self.tick < 50:
+                screen.blit(self.texture, ((self.tick-20)*20-600 + 250, 165))
+            elif self.tick < 100:
+                screen.blit(self.texture, (0 + 250, 165))
+            elif self.tick < 130:
+                screen.blit(self.texture, ((self.tick - 100) * 20 + 250, 165))
+
+    def update(self):
+        self.tick += 1
+
+    def handle_event(self, event):
+        pass

@@ -41,6 +41,7 @@ class MainMenu:
                 self.point_set2[i].move()
         self.hovered = 1
         self.con_hovered = 1
+        bgs[0].playNonStop()
 
     def update(self):
         for i in range(5):
@@ -73,8 +74,6 @@ class MainMenu:
             screen.blit(texture_lib["continue_button_hovered"], (0, 240))
         else:
             screen.blit(texture_lib["continue_button"], (0, 240))
-        screen.blit(texture_lib["settings_button"], (0, 335))
-        screen.blit(texture_lib["help_button"], (59, 341))
         for point in self.points:
             pygame.draw.polygon(screen, (170, 170, 170),
                                 ((point, 163), (point+75, 161), (point+150, 163), (point+75, 165), (point, 163)))
@@ -84,6 +83,7 @@ class MainMenu:
         if self.con_hovered == 1:
             for i in range(len(self.point_set2)-1):
                 pygame.draw.line(screen, (255, 255, 255), self.point_set2[i].get(), self.point_set2[i+1].get())
+        screen.blit(texture_lib["copyright"], (0, 0))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
@@ -97,6 +97,7 @@ class MainMenu:
 class LevelSelect:
     status_texture = (texture_lib["level_d"], texture_lib["level_p"], texture_lib["level_c"], texture_lib["level_s"])
     def __init__(self, level_at):
+        bgs[4].playNonStop()
         self.float_cycle = ReCycle(6, 4)
         self.level_float = ReCycle(6, 2)
         self.level_points = ((46, 144), (134, 227), (290, 202), (412, 274), (558, 241), (734, 302), (872, 231),

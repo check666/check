@@ -1,4 +1,5 @@
 from config import *
+from animations import *
 
 class Segment:
     def __init__(self, center, angle, width):
@@ -99,6 +100,8 @@ class Snake:
             self.level += 1
             self.grow()
             self.current_exp = 0
+            for point in self.hit_points:
+                self.game.map.animations.append(LevelUp(point))
 
         if self.outofbound:
             self.hp -= 1

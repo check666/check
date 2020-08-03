@@ -12,6 +12,8 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 chat_font_size = 20
 chat_font = pygame.font.Font("sanji.ttf", chat_font_size)
 
+level_font = pygame.font.Font("sanji.ttf", 40)
+
 clock = pygame.time.Clock()
 
 def get_distance(p1, p2):
@@ -34,3 +36,28 @@ texture_lib = {}
 
 for name in texture_names:
     texture_lib[name] = load(name)
+
+class AudioPlayer():
+    def __init__(self,id,type,volume=0.2):
+        self.id = id
+        self.music = pygame.mixer.Sound(os.path.join('audio', id+'.ogg'))
+        self.music.set_volume(volume)
+        if type == "bg":
+            self.channel = pygame.mixer.Channel(1)
+        if type == "se":
+            self.channel = pygame.mixer.Channel(2)
+
+    def playNonStop(self):
+        self.channel.play(self.music,-1)
+
+    def playOnce(self):
+        self.channel.play(self.music, 0)
+
+    def stop(self):
+        self.channel.stop()
+
+bgs = (AudioPlayer("menubg", "bg"),
+       AudioPlayer("gamebg", "bg"),
+       AudioPlayer("gamebg2", "bg"),
+       AudioPlayer("chat", "bg"),
+       AudioPlayer("map", "bg", volume=0.06))
