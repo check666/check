@@ -8,6 +8,8 @@ from scene import *
 class Game:
     def __init__(self):
         self.snake_move_cycle = Cycle(2, 1)
+        self.current_level = 0
+        self.current_playing = 0
 
         self.map = None
 
@@ -17,7 +19,7 @@ class Game:
 
         self.info_hud = None
 
-        self.menu = LevelSelect()
+        self.menu = MainMenu()
 
         self.shaking = [False, False]
         self.shake_cycle = [ReCycle(15, 1), ReCycle(15, 1)]
@@ -89,7 +91,12 @@ class Game:
         if self.menu:
             result = self.menu.handle_event(event)
             if result != -1:
-                self.start()
+                if result >= 0:
+                    self.current_playing = result
+                    self.start(result+1)
+                else:
+                    if result == -2:
+                        self.menu = LevelSelect(self.current_level)
         elif not self.scene:
             pass
         else:
@@ -107,9 +114,12 @@ class Game:
             self.snake.update()
 
             self.info_hud.update()
-
-            if self.map.is_passed():
-                self.menu = LevelSelect()
+            if self.map.is_dead():
+                self.menu = LevelSelect(self.current_level)
+                self.map = None
+            elif self.map.is_passed() and self.current_level == self.current_playing:
+                self.current_level += 1
+                self.menu = LevelSelect(self.current_level)
         else:
             self.scene.update()
             if self.scene.is_ended():

@@ -19,10 +19,14 @@ class Map(Level):
         self.attacks = []
         self.food_count = 5
         self.per_exp = 10
+        self.pass_level = 1
 
         self.boarder_cycle = ReCycle(6, 1)
 
         self.animations = []
+
+    def is_dead(self):
+        return self.snake.hp < 0
 
     def draw_boarder(self, offset):
         c = self.boarder_cycle.get()
@@ -95,6 +99,8 @@ class Map(Level):
             screen.blit(texture_lib["danger"], (0, 0))
 
         self.draw_boarder(offset)
+        pass_render = chat_font.render("目标等级"+str(self.pass_level), False, (255, 255, 255))
+        screen.blit(pass_render, (450, 30))
 
     def update(self):
         for i in range(len(self.exp_balls)-1, -1, -1):
@@ -144,9 +150,10 @@ class Level1(Map):
         Map.__init__(self, game)
         self.deme[0] = 200
         self.deme[1] = 200
+        self.pass_level = 2
 
     def is_passed(self):
-        if self.snake.level >= 3:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -155,12 +162,13 @@ class Level2(Map):
         Map.__init__(self, game)
         self.deme[0] = 250
         self.deme[1] = 250
+        self.pass_level = 5
 
         self.objects.append(OneCanon((-310, 100)))
         self.objects.append(OneCanon((-310, -100)))
 
     def is_passed(self):
-        if self.snake.level >= 5:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -177,11 +185,12 @@ class Level3(Map):
         self.deme[0] = 300
         self.deme[1] = 300
         self.per_exp = 20
+        self.pass_level = 10
 
         self.objects.append(CrossCanon((-40, -40)))
 
     def is_passed(self):
-        if self.snake.level >= 10:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -198,9 +207,10 @@ class Level4(Map):
         self.deme[1] = 350
         self.per_exp = 20
         self.beam_cycle = Cycle(80, 0)
+        self.pass_level = 10
 
     def is_passed(self):
-        if self.snake.level >= 10:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -241,9 +251,10 @@ class Level5(Map):
         self.deme[1] = 400
         self.per_exp = 20
         self.count_down = 80
+        self.pass_level = 10
 
     def is_passed(self):
-        if self.snake.level >= 10:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -261,12 +272,13 @@ class Level6(Map):
         self.per_exp = 20
         self.attacked = True
         self.current_attack_pos = (-150, -300)
+        self.pass_level = 10
 
         self.attack_countdown = 90
         self.attack_tick = self.attack_countdown
 
     def is_passed(self):
-        if self.snake.level >= 10:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -294,6 +306,7 @@ class Level7(Map):
         self.deme[0] = 400
         self.deme[1] = 400
         self.per_exp = 20
+        self.pass_level = 15
 
         self.current_wave = ((300, -400), (100, -400), (-100, -400), (-300, -400), "v")
         self.attacking = True
@@ -303,7 +316,7 @@ class Level7(Map):
         self.attack_cycle = Cycle(120, 0)
 
     def is_passed(self):
-        if self.snake.level >= 15:
+        if self.snake.level >= self.pass_level:
             return True
         return False
 
@@ -341,6 +354,7 @@ class Level8(Map):
         self.deme[1] = 400
         self.per_exp = 101
         self.food_count = 20
+        self.pass_level = 9999
 
     def is_passed(self):
         return False
