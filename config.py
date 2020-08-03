@@ -14,7 +14,6 @@ chat_font = pygame.font.Font("sanji.ttf", chat_font_size)
 
 clock = pygame.time.Clock()
 
-
 def get_distance(p1, p2):
     d1, d2 = p1[0] - p2[0], p1[1] - p2[1]
     return sqrt(d1*d1 + d2*d2)

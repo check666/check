@@ -58,7 +58,7 @@ class ChatBox:
             if self.tick < 60:
                 self.tick += 1
             else:
-                screen.blit(texture_lib["mouse_click"], (self.pos[0] + self.width - 10, self.pos[1] + 10),
+                screen.blit(texture_lib["mouse_click"], (self.pos[0] + self.width - 10, self.pos[1] + self.height - 15),
                             pygame.Rect(0, 25*self.click_cycle.get(), 25, 25))
 
 class TalkScene:
@@ -68,7 +68,10 @@ class TalkScene:
         self.stage = 0
         self.stage_tick = 0
         self.stage_duration = [50, 0, 25]
-        self.chats = chats[1:]
+        self.chats = []
+        for piece in chats:
+            self.chats.append(piece)
+        self.chats.pop(0)
         self.current_chat = None
         if chats[0][0] == 1:
             self.current_chat = ChatBox(chats[0][1], (130, 200), (180, 240))

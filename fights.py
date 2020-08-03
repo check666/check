@@ -83,7 +83,7 @@ class Beam(Obstacles):
                              int(self.speed * (self.pre_t + self.last_t*2 - self.tick)))
 
 class LastBeam(Obstacles):
-    def __init__(self, pos, height, orientation, objectT, width=30, pre_t=100, dur_t=60, last_t=6, color=(242, 245, 66), damage=5):
+    def __init__(self, pos, height, orientation, objectT, width=30, pre_t=100, dur_t=60, last_t=6, color=(242, 245, 66), damage=20):
         Obstacles.__init__(self)
         self.damage = damage
         self.color = color
@@ -241,7 +241,7 @@ class CrossCanon:
         else:
             if self.attack_cycle.get() == 0 and self.attack_cycle.changed():
                 self.attack()
-                self.attack_cycle.current += random.randint(0, 40)
+                self.attack_cycle.tick += random.randint(0, 40)
 
     def draw(self, offset):
         if self.attacking:

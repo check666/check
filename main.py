@@ -2,7 +2,6 @@ from game import *
 from scene import *
 
 g = Game()
-g.start()
 
 #g.start_scene(TalkScene("snake_1", "snake_2", [(1, "哈喽"), (1, "你也好啊"), (2, "我又说一句"), (1, "我再来一句")]))
 

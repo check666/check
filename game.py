@@ -2,6 +2,8 @@ from snake import *
 from map import *
 from hud import *
 from menu import *
+from chat import *
+from scene import *
 
 class Game:
     def __init__(self):
@@ -45,14 +47,31 @@ class Game:
     def start_scene(self, scene):
         self.scene = scene
 
-    def start(self):
-        self.map = Level7(self)
+    def start(self, level=7):
+        self.menu = None
         self.snake = Snake(self)
         for _ in range(5):
             self.snake.grow()
         self.info_hud = InfoBar(self.snake)
+        if level == 1:
+            self.map = Level1(self)
+        elif level == 2:
+            self.map = Level2(self)
+        elif level == 3:
+            self.map = Level3(self)
+        elif level == 4:
+            self.map = Level4(self)
+        elif level == 5:
+            self.map = Level5(self)
+        elif level == 6:
+            self.map = Level6(self)
+        elif level == 7:
+            self.map = Level7(self)
+        elif level == 8:
+            self.map = Level8(self)
         self.map.set_snake(self.snake)
         self.update()
+        self.start_scene(TalkScene("snake_1", "snake_2", level_chats[level-1]))
 
     def draw(self):
         if self.menu:
@@ -71,7 +90,6 @@ class Game:
             result = self.menu.handle_event(event)
             if result != -1:
                 self.start()
-                self.menu = None
         elif not self.scene:
             pass
         else:
@@ -82,7 +100,6 @@ class Game:
             self.menu.update()
         elif not self.scene:
             self.snake.set_direction(env["mouse_direction"])
-
             self.map.update()
 
             if self.snake_move_cycle.get() == 0:

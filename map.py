@@ -199,9 +199,6 @@ class Level4(Map):
         self.per_exp = 20
         self.beam_cycle = Cycle(80, 0)
 
-        self.objects.append(MovingBeamCannon((-350, 0), "h", 1, 350, 700))
-        self.attacks.append(self.objects[-1].get_beam())
-
     def is_passed(self):
         if self.snake.level >= 10:
             return True
@@ -213,28 +210,28 @@ class Level4(Map):
             if self.beam_cycle.get() == 0:
                 generated = random.randint(0, 7)
                 if generated == 0:
-                    self.objects.append(MovingBeamCannon((-350, -350), "h", 1, 350, 700))
+                    self.objects.append(MovingBeamCannon((-350, -350), "h", 1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 1:
-                    self.objects.append(MovingBeamCannon((-350, 0), "h", 1, 350, 700))
+                    self.objects.append(MovingBeamCannon((-350, 0), "h", 1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 2:
-                    self.objects.append(MovingBeamCannon((-350, 350), "h", -1, 350, 700))
+                    self.objects.append(MovingBeamCannon((-350, 350), "h", -1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 3:
-                    self.objects.append(MovingBeamCannon((-350, 0), "h", -1, 350, 700))
+                    self.objects.append(MovingBeamCannon((-350, 0), "h", -1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 4:
-                    self.objects.append(MovingBeamCannon((-350, -350), "v", 1, 350, 700))
+                    self.objects.append(MovingBeamCannon((-350, -350), "v", 1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 5:
-                    self.objects.append(MovingBeamCannon((0, -350), "v", 1, 350, 700))
+                    self.objects.append(MovingBeamCannon((0, -350), "v", 1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 6:
-                    self.objects.append(MovingBeamCannon((350, -350), "v", -1, 350, 700))
+                    self.objects.append(MovingBeamCannon((350, -350), "v", -1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
                 elif generated == 7:
-                    self.objects.append(MovingBeamCannon((0, -350), "v", -1, 350, 700))
+                    self.objects.append(MovingBeamCannon((0, -350), "v", -1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
 
 class Level5(Map):
@@ -243,8 +240,7 @@ class Level5(Map):
         self.deme[0] = 400
         self.deme[1] = 400
         self.per_exp = 20
-
-        self.attacks.append(CenterSlice(1, 0.005, 400))
+        self.count_down = 80
 
     def is_passed(self):
         if self.snake.level >= 10:
@@ -253,6 +249,9 @@ class Level5(Map):
 
     def update(self):
         Map.update(self)
+        self.count_down -= 1
+        if self.count_down == 0:
+            self.attacks.append(CenterSlice(1, 0.005, 400))
 
 class Level6(Map):
     def __init__(self, game):
@@ -304,7 +303,7 @@ class Level7(Map):
         self.attack_cycle = Cycle(120, 0)
 
     def is_passed(self):
-        if self.snake.level >= 10:
+        if self.snake.level >= 15:
             return True
         return False
 
@@ -313,13 +312,13 @@ class Level7(Map):
         if self.attacking:
             self.attack_tick += 1
             if self.attack_tick == self.attack_speed:
-                self.attacks.append(Beam(self.current_wave[0], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+                self.attacks.append(Beam(self.current_wave[0], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*2:
-                self.attacks.append(Beam(self.current_wave[1], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+                self.attacks.append(Beam(self.current_wave[1], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*3:
-                self.attacks.append(Beam(self.current_wave[2], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+                self.attacks.append(Beam(self.current_wave[2], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*4:
-                self.attacks.append(Beam(self.current_wave[3], 800, self.current_wave[4], pre_t=80, width=30, damage=20))
+                self.attacks.append(Beam(self.current_wave[3], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
             elif self.attack_tick > self.attack_speed * 4:
                 self.attacking = False
                 self.attack_tick = 0
