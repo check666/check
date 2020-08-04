@@ -1,4 +1,5 @@
 # Snake创意游戏
+**非常建议开音量玩，30左右即可**
 
 exe文件：
 下载SnakeQuest-exe文件夹，运行SnakeQuest.exe
