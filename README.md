@@ -2,7 +2,7 @@
 **非常建议开音量玩，30左右即可**
 
 exe文件：
-下载SnakeQuest-exe文件夹，运行SnakeQuest.exe
+下载zip包后进入SnakeQuest-exe文件夹，运行SnakeQuest.exe
 
 src包：
 使用python3, 安装pygame
