@@ -1,10 +1,10 @@
-from config import *
-
 from animations import *
+from cycle import *
+
 
 class Obstacles:
-    def __init__(self, map):
-        self.map = map
+    def __init__(self, map_in):
+        self.map = map_in
         self.damage = 0
         self.attack = False
         self.dead = False
@@ -20,9 +20,10 @@ class Obstacles:
     def update(self):
         pass
 
+
 class Beam(Obstacles):
-    def __init__(self, map, pos, length, direction, width=30, pre_t=100, last_t=6, color=(242, 245, 66), damage=20):
-        Obstacles.__init__(self, map)
+    def __init__(self, map_in, pos, length, direction, width=30, pre_t=100, last_t=6, color=(242, 245, 66), damage=20):
+        Obstacles.__init__(self, map_in)
         self.damage = damage
         self.color = color
         self.pos = pos
@@ -46,26 +47,25 @@ class Beam(Obstacles):
             for i in range(0, len(snake.hit_points)-2, 2):
                 if not(self.pos[0] - self.width/2 > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
                         self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
-                    self.map.animations.append(Particle_explode(snake.hit_points[i]))
-                    self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
-                    ses[3].playOnce()
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i]))
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i + 2]))
+                    ses[3].play_once()
                     return True
 
         elif self.direction == "h":
             for i in range(0, len(snake.hit_points)-2, 2):
                 if not (self.pos[1] - self.width/2 > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
                         self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
-                    self.map.animations.append(Particle_explode(snake.hit_points[i]))
-                    self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
-                    ses[3].playOnce()
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i]))
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i + 2]))
+                    ses[3].play_once()
                     return True
         return False
-
 
     def update(self):
         if self.tick == self.pre_t:
             if self.width < 100:
-                ses[6].playOnce()
+                ses[6].play_once()
 
         if self.tick > self.pre_t + self.last_t*2:
             self.dead = True
@@ -80,8 +80,8 @@ class Beam(Obstacles):
     def draw(self, offset):
         if self.tick < self.pre_t:
             pygame.draw.line(screen, (255, 100, 100),
-                         (self.point1[0] + offset[0], self.point1[1] + offset[1]),
-                         (self.point2[0] + offset[0], self.point2[1] + offset[1]), 2)
+                             (self.point1[0] + offset[0], self.point1[1] + offset[1]),
+                             (self.point2[0] + offset[0], self.point2[1] + offset[1]), 2)
         elif self.tick < self.pre_t + self.last_t:
             pygame.draw.line(screen, self.color,
                              (self.point1[0] + offset[0], self.point1[1] + offset[1]),
@@ -93,9 +93,11 @@ class Beam(Obstacles):
                              (self.point2[0] + offset[0], self.point2[1] + offset[1]),
                              int(self.speed * (self.pre_t + self.last_t*2 - self.tick)))
 
+
 class LastBeam(Obstacles):
-    def __init__(self, map, pos, height, orientation, objectT, width=30, pre_t=100, dur_t=60, last_t=6, color=(242, 245, 66), damage=20):
-        Obstacles.__init__(self, map)
+    def __init__(self, map_in, pos, height, orientation, object_t, width=30, pre_t=100, dur_t=60,
+                 last_t=6, color=(242, 245, 66), damage=20):
+        Obstacles.__init__(self, map_in)
         self.damage = damage
         self.color = color
         self.pos = [pos[0], pos[1]]
@@ -113,7 +115,7 @@ class LastBeam(Obstacles):
         self.pre_t = pre_t
         self.dur_t = dur_t
         self.last_t = last_t
-        self.objectT = objectT
+        self.objectT = object_t
 
         self.speed = width / self.last_t
         self.attack_cycle = Cycle(20, 0)
@@ -123,21 +125,20 @@ class LastBeam(Obstacles):
             for i in range(0, len(snake.hit_points)-2, 2):
                 if not(self.pos[0] - self.width/2 > max(snake.hit_points[i][0], snake.hit_points[i+2][0]) or
                         self.pos[0] + self.width/2 < min(snake.hit_points[i][0], snake.hit_points[i+2][0])):
-                    self.map.animations.append(Particle_explode(snake.hit_points[i]))
-                    self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
-                    ses[3].playOnce()
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i]))
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i + 2]))
+                    ses[3].play_once()
                     return True
 
         elif self.orientation == "h":
             for i in range(0, len(snake.hit_points)-2, 2):
                 if not (self.pos[1] - self.width/2 > max(snake.hit_points[i][1], snake.hit_points[i + 2][1]) or
                         self.pos[1] + self.width/2 < min(snake.hit_points[i][1], snake.hit_points[i + 2][1])):
-                    self.map.animations.append(Particle_explode(snake.hit_points[i]))
-                    self.map.animations.append(Particle_explode(snake.hit_points[i + 2]))
-                    ses[3].playOnce()
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i]))
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i + 2]))
+                    ses[3].play_once()
                     return True
         return False
-
 
     def update(self):
         self.tick += 1
@@ -148,11 +149,11 @@ class LastBeam(Obstacles):
 
     def draw(self, offset):
         if self.tick == self.pre_t + self.last_t:
-            ses[6].playOnce()
+            ses[6].play_once()
         if self.tick < self.pre_t:
             pygame.draw.line(screen, (255, 100, 100),
-                         (self.point1[0] + offset[0], self.point1[1] + offset[1]),
-                         (self.point2[0] + offset[0], self.point2[1] + offset[1]), 2)
+                             (self.point1[0] + offset[0], self.point1[1] + offset[1]),
+                             (self.point2[0] + offset[0], self.point2[1] + offset[1]), 2)
         elif self.tick < self.pre_t + self.last_t:
             pygame.draw.line(screen, self.color,
                              (self.point1[0] + offset[0], self.point1[1] + offset[1]),
@@ -171,9 +172,10 @@ class LastBeam(Obstacles):
         else:
             self.dead = True
 
+
 class Bullet(Obstacles):
-    def __init__(self, map, damage, radius, x, y, vx, vy, one_time=True):
-        Obstacles.__init__(self, map)
+    def __init__(self, map_in, damage, radius, x, y, vx, vy, one_time=True):
+        Obstacles.__init__(self, map_in)
         self.damage = damage
         self.radius = radius
         self.speed = [vx, vy]
@@ -195,10 +197,11 @@ class Bullet(Obstacles):
             if get_distance(snake.hit_points[i], self.pos) < snake.width + self.radius - 3:
                 if self.dead_on_collide:
                     self.dead = True
-                self.map.animations.append(Particle_explode(snake.hit_points[i]))
-                ses[3].playOnce()
+                self.map.animations.append(ParticleExplode(snake.hit_points[i]))
+                ses[3].play_once()
                 return True
         return False
+
 
 class ExpBall:
     def __init__(self, pos, points=10):
@@ -209,6 +212,7 @@ class ExpBall:
     def draw(self, offset):
         screen.blit(texture_lib["food"], (self.pos[0] + offset[0] - 22, self.pos[1] + offset[1] - 22),
                     pygame.Rect(0, self.cycle.get()*45, 45, 45))
+
 
 class OneCanon:
     def __init__(self, pos):
@@ -242,6 +246,7 @@ class OneCanon:
             screen.blit(texture_lib["one_cannon"], (self.pos[0] + offset[0], self.pos[1] + offset[1]),
                         pygame.Rect(0, 0, 80, 80))
 
+
 class CrossCanon:
     def __init__(self, pos):
         self.cast = False
@@ -274,8 +279,9 @@ class CrossCanon:
             screen.blit(texture_lib["cross_cannon"], (self.pos[0] + offset[0], self.pos[1] + offset[1]),
                         pygame.Rect(0, 0, 80, 80))
 
+
 class MovingBeamCannon:
-    def __init__(self, map, pos, orientation, direction, length, height, cd=60):
+    def __init__(self, map_in, pos, orientation, direction, length, height, cd=60):
         self.orientation = orientation
         self.height = height
         self.cast = False
@@ -292,7 +298,7 @@ class MovingBeamCannon:
         self.direction = direction
         self.end_tick = cd
         self.dying = False
-        self.beam = LastBeam(map, self.pos, self.height, self.orientation, self,
+        self.beam = LastBeam(map_in, self.pos, self.height, self.orientation, self,
                              pre_t=cd-20, last_t=20, dur_t=self.length/self.speed)
 
     def get_beam(self):
@@ -340,14 +346,17 @@ class MovingBeamCannon:
     def draw(self, offset):
         if self.orientation == "v":
             screen.blit(texture_lib["line_top"], (self.pos[0] + offset[0] - 40, self.pos[1] + offset[1] - 50))
-            screen.blit(texture_lib["line_bottom"], (self.pos[0] + offset[0] - 40, self.pos[1] + offset[1] - 40 + self.height))
+            screen.blit(texture_lib["line_bottom"], (self.pos[0] + offset[0] - 40,
+                                                     self.pos[1] + offset[1] - 40 + self.height))
         else:
             screen.blit(texture_lib["line_right"], (self.pos[0] + offset[0] - 50, self.pos[1] + offset[1] - 40))
-            screen.blit(texture_lib["line_left"], (self.pos[0] + offset[0] + self.height - 40, self.pos[1] + offset[1] - 40))
+            screen.blit(texture_lib["line_left"], (self.pos[0] + offset[0] + self.height - 40,
+                                                   self.pos[1] + offset[1] - 40))
+
 
 class CenterSlice(Obstacles):
-    def __init__(self, map, damage, speed, boxed):
-        Obstacles.__init__(self, map)
+    def __init__(self, map_in, damage, speed, boxed):
+        Obstacles.__init__(self, map_in)
         self.boxed = boxed
         self.damage = damage
         self.radius = boxed*1.414
@@ -387,11 +396,11 @@ class CenterSlice(Obstacles):
 
     def collide_with(self, snake):
         for i in range(0, len(snake.hit_points), 2):
-            for l in range(4):
-                diff = self.angle + (l*pi/2) - get_angle(snake.hit_points[i][0], snake.hit_points[i][1])
+            for i2 in range(4):
+                diff = self.angle + (i2*pi/2) - get_angle(snake.hit_points[i][0], snake.hit_points[i][1])
                 while diff > pi:
                     diff -= pi * 2
                 if -self.shade < diff < self.shade:
-                    self.map.animations.append(Particle_explode(snake.hit_points[i]))
+                    self.map.animations.append(ParticleExplode(snake.hit_points[i]))
                     return True
         return False

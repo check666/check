@@ -1,5 +1,5 @@
-from config import *
 from fights import *
+
 
 class Level:
     def __init__(self):
@@ -7,6 +7,7 @@ class Level:
 
     def is_passed(self):
         return False
+
 
 class Map(Level):
     def __init__(self, game):
@@ -65,7 +66,7 @@ class Map(Level):
                          pygame.Rect(offset[0] + self.deme[0] - 15, offset[1] - self.deme[1] - 15, 30,
                                      30))
         pygame.draw.rect(screen, (255, 255, 255),
-                         pygame.Rect(offset[0] - self.deme[0] - 15, offset[1] + self.deme[1] -15, 30,
+                         pygame.Rect(offset[0] - self.deme[0] - 15, offset[1] + self.deme[1] - 15, 30,
                                      30))
         pygame.draw.rect(screen, (255, 255, 255),
                          pygame.Rect(offset[0] + self.deme[0] - 15, offset[1] + self.deme[1] - 15, 30,
@@ -106,7 +107,7 @@ class Map(Level):
         for i in range(len(self.exp_balls)-1, -1, -1):
             if get_distance(self.snake.position, self.exp_balls[i].pos) < 20:
                 self.snake.current_exp += self.exp_balls[i].points
-                ses[2].playOnce()
+                ses[2].play_once()
                 del self.exp_balls[i]
 
         for i in range(len(self.animations) - 1, -1, -1):
@@ -146,6 +147,7 @@ class Map(Level):
         else:
             self.snake.outofbound = False
 
+
 class Level1(Map):
     def __init__(self, game):
         Map.__init__(self, game)
@@ -160,6 +162,7 @@ class Level1(Map):
 
     def update(self):
         Map.update(self)
+
 
 class Level2(Map):
     def __init__(self, game):
@@ -181,10 +184,11 @@ class Level2(Map):
         Map.update(self)
         if self.objects[0].cast:
             self.add_bullet((self.objects[0].pos[0]+70, self.objects[0].pos[1]+40), (5, 0), 15, 10)
-            ses[5].playOnce()
+            ses[5].play_once()
         if self.objects[1].cast:
             self.add_bullet((self.objects[1].pos[0]+70, self.objects[1].pos[1]+40), (5, 0), 15, 10)
-            ses[5].playOnce()
+            ses[5].play_once()
+
 
 class Level3(Map):
     def __init__(self, game):
@@ -206,6 +210,7 @@ class Level3(Map):
         if self.objects[0].cast:
             self.add_beam((-300, 0), 600, "h")
             self.add_beam((0, -300), 600, "v")
+
 
 class Level4(Map):
     def __init__(self, game):
@@ -251,6 +256,7 @@ class Level4(Map):
                     self.objects.append(MovingBeamCannon(self, (0, -350), "v", -1, 300, 700))
                     self.attacks.append(self.objects[-1].get_beam())
 
+
 class Level5(Map):
     def __init__(self, game):
         Map.__init__(self, game)
@@ -270,6 +276,7 @@ class Level5(Map):
         self.count_down -= 1
         if self.count_down == 0:
             self.attacks.append(CenterSlice(self, 1, 0.005, 400))
+
 
 class Level6(Map):
     def __init__(self, game):
@@ -296,7 +303,7 @@ class Level6(Map):
             self.attack_tick = self.attack_countdown
             self.attacked = True
             self.attacks.append(Beam(self, self.current_attack_pos, 600, "v", last_t=10, pre_t=0, width=300, damage=40))
-            ses[0].playOnce()
+            ses[0].play_once()
             self.game.shake("v", 60)
         elif not self.animations and not self.attacks:
             self.attack_tick -= 1
@@ -307,6 +314,7 @@ class Level6(Map):
                 else:
                     self.current_attack_pos = (150, -300)
                 self.animations.append(Charge(self.current_attack_pos, 150, 600, 20))
+
 
 class Level7(Map):
     def __init__(self, game):
@@ -333,13 +341,17 @@ class Level7(Map):
         if self.attacking:
             self.attack_tick += 1
             if self.attack_tick == self.attack_speed:
-                self.attacks.append(Beam(self, self.current_wave[0], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
+                self.attacks.append(Beam(self, self.current_wave[0], 800, self.current_wave[4],
+                                         pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*2:
-                self.attacks.append(Beam(self, self.current_wave[1], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
+                self.attacks.append(Beam(self, self.current_wave[1], 800, self.current_wave[4],
+                                         pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*3:
-                self.attacks.append(Beam(self, self.current_wave[2], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
+                self.attacks.append(Beam(self, self.current_wave[2], 800, self.current_wave[4],
+                                         pre_t=80, width=50, damage=20))
             elif self.attack_tick == self.attack_speed*4:
-                self.attacks.append(Beam(self, self.current_wave[3], 800, self.current_wave[4], pre_t=80, width=50, damage=20))
+                self.attacks.append(Beam(self, self.current_wave[3], 800, self.current_wave[4],
+                                         pre_t=80, width=50, damage=20))
             elif self.attack_tick > self.attack_speed * 4:
                 self.attacking = False
                 self.attack_tick = 0
@@ -354,6 +366,7 @@ class Level7(Map):
                 self.current_wave = ((-400, -300), (-400, -100), (-400, 100), (-400, 300), "h")
             elif mode == 4:
                 self.current_wave = ((-400, 300), (-400, 100), (-400, -100), (-400, -300), "h")
+
 
 class Level8(Map):
     def __init__(self, game):

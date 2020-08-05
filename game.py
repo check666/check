@@ -5,6 +5,7 @@ from menu import *
 from chat import *
 from scene import *
 
+
 class Game:
     def __init__(self, current_level=0):
         self.snake_move_cycle = Cycle(2, 1)
@@ -44,7 +45,7 @@ class Game:
             return -int(self.snake.position[0] - screen_width/2), \
                    self.shake_cycle[1].get()-int(self.snake.position[1] - screen_height/2)
         return -int(self.snake.position[0] - screen_width/2), \
-                -int(self.snake.position[1] - screen_height/2)
+               -int(self.snake.position[1] - screen_height/2)
 
     def start_scene(self, scene):
         self.scene = scene
@@ -74,7 +75,7 @@ class Game:
         self.map.set_snake(self.snake)
         self.update()
         self.start_scene(TalkScene("snake_1", "snake_2", level_chats[level-1]))
-        bgs[3].playNonStop()
+        bgs[3].play_non_stop()
 
     def draw(self):
         if not self.scene and self.menu:
@@ -136,9 +137,9 @@ class Game:
                 if self.scene.name == "chat":
                     m = random.randint(0, 1)
                     if m == 0:
-                        bgs[1].playNonStop()
+                        bgs[1].play_non_stop()
                     else:
-                        bgs[2].playNonStop()
+                        bgs[2].play_non_stop()
                     self.scene = LevelNum(self.current_playing+1)
                 else:
                     self.scene = None

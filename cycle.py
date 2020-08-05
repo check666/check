@@ -1,5 +1,6 @@
 import random
 
+
 class Cycle:
     def __init__(self, num, speed):
         self.tick = 0
@@ -28,6 +29,7 @@ class Cycle:
     def changed(self):
         return self.prev != self.current
 
+
 class ReCycle:
     def __init__(self, num, speed, start=0):
         self.tick = 0
@@ -51,7 +53,7 @@ class ReCycle:
             elif self.current < 0:
                 self.current = 0
                 self.v = 1
-        return  self.current
+        return self.current
 
     def reset(self):
         self.tick = 0
@@ -60,14 +62,15 @@ class ReCycle:
     def changed(self):
         return self.prev != self.current
 
+
 class RandCycle:
-    def __init__(self, num, speed, range):
+    def __init__(self, num, speed, range_in):
         self.tick = 0
         self.current = 0
         self.speed = speed
         self.num = num
         self.one = False
-        self.range = range
+        self.range = range_in
         self.prev = self.current
 
     def changed(self):
@@ -88,4 +91,3 @@ class RandCycle:
     def reset(self):
         self.tick = 0
         self.current = 0
-

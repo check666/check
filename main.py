@@ -1,5 +1,6 @@
 from game import *
 from scene import *
+import sys
 
 if os.path.exists("save"):
     f = open("save", "r")

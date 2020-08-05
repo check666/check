@@ -1,5 +1,5 @@
-from config import *
 from animations import *
+
 
 class Segment:
     def __init__(self, center, angle, width):
@@ -23,6 +23,7 @@ class Segment:
     def get_point2(self, offset):
         return (self.center[0] - self.draw_displacement[0] + offset[0],
                 self.center[1] - self.draw_displacement[1] + offset[1])
+
 
 class Snake:
     def __init__(self, game):
@@ -99,7 +100,7 @@ class Snake:
             self.poly_points.append(self.segments[i].get_point2(self.game.get_offset()))
 
         if self.current_exp > 100:
-            ses[4].playOnce()
+            ses[4].play_once()
             self.level += 1
             self.grow()
             self.current_exp = 0
@@ -121,5 +122,5 @@ class Snake:
     def draw(self):
         pygame.draw.polygon(screen, self.color, self.poly_points)
         pygame.draw.circle(screen, self.color, (int(self.position[0] + self.game.get_offset()[0]),
-                                        int(self.position[1] + self.game.get_offset()[1])),
+                                                int(self.position[1] + self.game.get_offset()[1])),
                            self.width + 2)

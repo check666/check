@@ -1,4 +1,6 @@
 from config import *
+from cycle import *
+
 
 class ChatBox:
     def __init__(self, text, pos, start):
@@ -31,7 +33,7 @@ class ChatBox:
         if self.stage == 0:
             if self.tick < self.show_time:
                 dif1 = ((self.pos[0] + self.width / 2 - 15 - self.start[0])/self.show_time*self.tick,
-                         (self.pos[1] + self.height - 3 - self.start[1])/self.show_time*self.tick)
+                        (self.pos[1] + self.height - 3 - self.start[1])/self.show_time*self.tick)
                 dif2 = ((self.pos[0] + self.width / 2 + 15 - self.start[0])/self.show_time*self.tick,
                         (self.pos[1] + self.height - 3 - self.start[1])/self.show_time*self.tick)
                 pygame.draw.line(screen, (255, 255, 255), self.start,
@@ -60,6 +62,7 @@ class ChatBox:
             else:
                 screen.blit(texture_lib["mouse_click"], (self.pos[0] + self.width - 10, self.pos[1] + self.height - 15),
                             pygame.Rect(0, 25*self.click_cycle.get(), 25, 25))
+
 
 class TalkScene:
     def __init__(self, character1, character2, chats):
@@ -94,7 +97,7 @@ class TalkScene:
             if event.type == pygame.MOUSEBUTTONUP:
                 if self.current_chat.stage == 1:
                     self.current_chat.dead = True
-                    ses[7].playOnce()
+                    ses[7].play_once()
                 elif self.current_chat.stage == 0:
                     self.current_chat.stage = 1
                     self.current_chat.tick = 0
@@ -131,6 +134,7 @@ class TalkScene:
             screen.blit(texture_lib[self.c1], (0, 250))
             screen.blit(texture_lib[self.c2], (300, 250))
 
+
 class TextScene:
     def __init__(self, texture):
         self.name = "text"
@@ -159,6 +163,7 @@ class TextScene:
 
     def handle_event(self, event):
         pass
+
 
 class LevelNum:
     def __init__(self, num):

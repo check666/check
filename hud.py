@@ -1,5 +1,6 @@
 from config import *
 
+
 class InfoBar:
     def __init__(self, snake):
         self.snake = snake

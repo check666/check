@@ -1,6 +1,6 @@
-import pygame, sys, random, os
+import pygame
+import os
 from math import *
-from cycle import *
 
 pygame.init()
 
@@ -18,12 +18,15 @@ clock = pygame.time.Clock()
 
 pygame.display.set_caption('SnakeQuest')
 
+
 def get_distance(p1, p2):
     d1, d2 = p1[0] - p2[0], p1[1] - p2[1]
     return sqrt(d1*d1 + d2*d2)
 
+
 def get_angle(x, y):
     return atan2(y, x)
+
 
 textures = os.listdir("texture")
 
@@ -39,26 +42,28 @@ texture_lib = {}
 for name in texture_names:
     texture_lib[name] = load(name)
 
-class AudioPlayer():
-    def __init__(self,id,type,volume=0.2):
-        self.id = id
-        self.music = pygame.mixer.Sound(os.path.join('audio', id+'.ogg'))
+
+class AudioPlayer:
+    def __init__(self, id_in, type_in, volume=0.2):
+        self.id = id_in
+        self.music = pygame.mixer.Sound(os.path.join('audio', id_in + '.ogg'))
         self.music.set_volume(volume)
-        if type == "bg":
+        if type_in == "bg":
             self.channel = pygame.mixer.Channel(1)
-        if type == "se":
+        if type_in == "se":
             self.channel = pygame.mixer.Channel(2)
-        if type == "sn":
+        if type_in == "sn":
             self.channel = pygame.mixer.Channel(3)
 
-    def playNonStop(self):
-        self.channel.play(self.music,-1)
+    def play_non_stop(self):
+        self.channel.play(self.music, -1)
 
-    def playOnce(self):
+    def play_once(self):
         self.channel.play(self.music, 0)
 
     def stop(self):
         self.channel.stop()
+
 
 bgs = (AudioPlayer("menubg", "bg"),
        AudioPlayer("gamebg", "bg"),

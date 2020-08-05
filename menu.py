@@ -1,12 +1,14 @@
 from config import *
+from cycle import *
+
 
 class RectPoint:
-    def __init__(self, pos, speed, deme):
+    def __init__(self, pos, speed, side):
         self.start = (pos[0], pos[1])
         self.pos = pos
         self.vel = (speed, 0)
         self.speed = speed
-        self.deme = deme
+        self.side = side
 
     def move(self):
         self.pos[0] += self.vel[0]
@@ -14,19 +16,19 @@ class RectPoint:
         if self.pos[0] < self.start[0]:
             self.pos[0] = self.start[0]
             self.vel = (0, -self.speed)
-        elif self.pos[0] > self.start[0] + self.deme[0]:
-            self.pos[0] = self.start[0] + self.deme[0]
+        elif self.pos[0] > self.start[0] + self.side[0]:
+            self.pos[0] = self.start[0] + self.side[0]
             self.vel = (0, self.speed)
         elif self.pos[1] < self.start[1]:
             self.pos[1] = self.start[1]
             self.vel = (self.speed, 0)
-        elif self.pos[1] > self.start[1] + self.deme[1]:
-            self.pos[1] = self.start[1] + self.deme[1]
+        elif self.pos[1] > self.start[1] + self.side[1]:
+            self.pos[1] = self.start[1] + self.side[1]
             self.vel = (-self.speed, 0)
-
 
     def get(self):
         return self.pos
+
 
 class MainMenu:
     def __init__(self):
@@ -41,7 +43,7 @@ class MainMenu:
                 self.point_set2[i].move()
         self.hovered = 1
         self.con_hovered = 1
-        bgs[0].playNonStop()
+        bgs[0].play_non_stop()
 
     def update(self):
         for i in range(5):
@@ -88,18 +90,19 @@ class MainMenu:
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
             if self.hovered:
-                ses[1].playOnce()
+                ses[1].play_once()
                 return -2
             elif self.con_hovered:
-                ses[1].playOnce()
+                ses[1].play_once()
                 return -3
         return -1
 
 
 class LevelSelect:
     status_texture = (texture_lib["level_d"], texture_lib["level_p"], texture_lib["level_c"], texture_lib["level_s"])
+
     def __init__(self, level_at):
-        bgs[4].playNonStop()
+        bgs[4].play_non_stop()
         self.float_cycle = ReCycle(6, 4)
         self.level_float = ReCycle(6, 2)
         self.level_points = ((46, 144), (134, 227), (290, 202), (412, 274), (558, 241), (734, 302), (872, 231),
@@ -126,18 +129,19 @@ class LevelSelect:
         screen.blit(texture_lib["menu_route"], (-self.scroll, self.c_float))
         for i in range(len(self.level_points)):
             screen.blit(self.status_texture[self.point_status[i]], (self.level_points[i][0] - self.scroll,
-                                                 self.level_points[i][1] + self.c_float))
+                                                                    self.level_points[i][1] + self.c_float))
             title = chat_font.render("关卡" + str(i+1), False, (255, 255, 255))
             title2 = chat_font.render("关卡" + str(i + 1), False, (0, 0, 0))
             screen.blit(title, (self.level_points[i][0] - self.scroll + 10,
-                                                                    self.level_points[i][1] + self.c_float + 35))
+                                self.level_points[i][1] + self.c_float + 35))
             screen.blit(title2, (self.level_points[i][0] - self.scroll + 8,
-                                self.level_points[i][1] + self.c_float + 33))
+                                 self.level_points[i][1] + self.c_float + 33))
             if self.point_status[i] == 3:
-                screen.blit(texture_lib["level_base"], (self.level_points[i][0] + 7 - self.scroll,
-                                                 self.level_points[i][1] + self.c_float + self.level_float.get() - 75))
+                screen.blit(texture_lib["level_base"],
+                            (self.level_points[i][0] + 7 - self.scroll,
+                             self.level_points[i][1] + self.c_float + self.level_float.get() - 75))
                 screen.blit(texture_lib["icon" + str(i+1)], (self.level_points[i][0] + 7 - self.scroll,
-                                                        self.level_points[i][
+                                                             self.level_points[i][
                                                             1] + self.c_float + self.level_float.get() - 75))
         arrow_way = self.arrow_cycle.get()
         if self.scroll > 0:
@@ -170,6 +174,6 @@ class LevelSelect:
         if event.type == pygame.MOUSEBUTTONUP:
             for i in range(len(self.point_status)):
                 if self.point_status[i] == 3:
-                    ses[1].playOnce()
+                    ses[1].play_once()
                     return i
         return -1

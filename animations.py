@@ -1,4 +1,7 @@
 from config import *
+from cycle import *
+import random
+
 
 class ChargeLine:
     def __init__(self, pos, width, height):
@@ -22,6 +25,7 @@ class ChargeLine:
         self.distance -= 10
         if self.distance <= 0:
             self.dead = True
+
 
 class Charge:
     def __init__(self, pos, width, height, num_lines):
@@ -50,7 +54,8 @@ class Charge:
         elif not self.lines:
             self.dead = True
 
-class Particle_explode:
+
+class ParticleExplode:
     def __init__(self, pos):
         self.cycle = Cycle(4, 2)
         self.pos = (pos[0] - 25, pos[1] - 25)
@@ -63,6 +68,7 @@ class Particle_explode:
     def update(self):
         if self.cycle.one:
             self.dead = True
+
 
 class LevelUp:
     def __init__(self, pos):
