@@ -1,5 +1,6 @@
 exe文件在SnakeQuest-exe里-运行SnakeQuest.exe就可以了
 源代码需要python3+pygame, pygame使用pip安装即可~ :33
+喜欢的话就点个star资瓷一下叭~ 谢谢惹
 
 #### 作品名
 蛇蛇闯关
