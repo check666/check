@@ -44,5 +44,5 @@ https://gitee.com/jeffyan2000/Adapted-game-snake
 有打包好的exe文件
 
 #### 视频地址
-
-https://www.bilibili.com/video/BV1i64y1F78b/
+讲解版：https://www.bilibili.com/video/BV1iv411q77y/
+无讲解版：https://www.bilibili.com/video/BV1i64y1F78b/
