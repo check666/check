@@ -7,6 +7,10 @@ from scene import *
 
 
 class Game:
+    """
+    游戏主题，一共有六个阶段：主菜单，关卡选择，对话场景，关卡显示场景，关卡进行，关卡结果场景
+    可以根据current_level来改变当前关卡，用于继续上次游戏
+    """
     def __init__(self, current_level=0):
         self.snake_move_cycle = Cycle(2, 1)
         self.current_level = current_level
@@ -26,6 +30,7 @@ class Game:
         self.shake_cycle = [ReCycle(15, 1), ReCycle(15, 1)]
         self.shake_countdown = [0, 0]
 
+    # 摇晃当前屏幕，特效
     def shake(self, direction, dur_t):
         if direction == "v":
             self.shaking[1] = True
@@ -34,6 +39,7 @@ class Game:
             self.shaking[0] = True
             self.shake_countdown[0] = dur_t
 
+    # 获取当前渲染offset，为了让屏幕随着蛇移动
     def get_offset(self):
         if self.shaking[0] and self.shaking[1]:
             return self.shake_cycle[0].get()-int(self.snake.position[0] - screen_width/2), \
@@ -47,9 +53,11 @@ class Game:
         return -int(self.snake.position[0] - screen_width/2), \
                -int(self.snake.position[1] - screen_height/2)
 
+    # 开始一个场景
     def start_scene(self, scene):
         self.scene = scene
 
+    # 开始一个游戏
     def start(self, level=7):
         self.menu = None
         self.snake = Snake(self)
@@ -77,6 +85,7 @@ class Game:
         self.start_scene(TalkScene("snake_1", "snake_2", level_chats[level-1]))
         bgs[3].play_non_stop()
 
+    # 绘制当前状态，菜单优先，其次场景，最后是游戏本身
     def draw(self):
         if not self.scene and self.menu:
             self.menu.draw()
@@ -91,6 +100,7 @@ class Game:
                 self.map.draw(self.get_offset())
             self.scene.draw()
 
+    # 触发成员的键盘鼠标事件，并且根据返回的值来更新自己的状态
     def handle_event(self, event):
         if self.menu:
             result = self.menu.handle_event(event)
@@ -109,6 +119,7 @@ class Game:
         else:
             self.scene.handle_event(event)
 
+    # 更新当前状态，菜单优先，其次场景，最后是游戏本身。同时处理屏幕摇晃，根据结束场景开始游戏或者开始另外一个场景。
     def update(self):
         if not self.scene and self.menu:
             self.menu.update()

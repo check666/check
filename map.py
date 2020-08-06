@@ -2,14 +2,22 @@ from fights import *
 
 
 class Level:
+    """
+    关卡父类
+    """
     def __init__(self):
         pass
 
+    # 判断是否过关
     def is_passed(self):
         return False
 
 
 class Map(Level):
+    """
+    地图，存储数据有所有攻击，经验球，动画以及物品（大炮，激光炮等）
+    per_exp为每个经验球的经验，food_count是场上经验球数量，pass_level是过关等级
+    """
     def __init__(self, game):
         Level.__init__(self)
         self.game = game
@@ -26,9 +34,11 @@ class Map(Level):
 
         self.animations = []
 
+    # 判断当前蛇是否死亡
     def is_dead(self):
         return self.snake.hp < 0
 
+    # 绘制四周边框，是动画
     def draw_boarder(self, offset):
         c = self.boarder_cycle.get()
         pygame.draw.line(screen, (255, 255, 255),
@@ -72,20 +82,25 @@ class Map(Level):
                          pygame.Rect(offset[0] + self.deme[0] - 15, offset[1] + self.deme[1] - 15, 30,
                                      30))
 
+    # 添加一个激光，具体参数清参考fights里的Beam类
     def add_beam(self, position, length, direction, width=30):
         self.attacks.append(Beam(self, position, length, direction, width))
 
+    # 添加一个子弹，具体参数清参考fights里的Bullet类
     def add_bullet(self, position, speed, radius, damage):
         self.attacks.append(Bullet(self, damage, radius, position[0], position[1], speed[0], speed[1]))
 
+    # 设置当前蛇
     def set_snake(self, snake):
         self.snake = snake
 
+    # 绘制背景底色
     def draw_background(self, offset):
         pygame.draw.rect(screen, (70, 70, 70),
                          pygame.Rect(offset[0] - self.deme[0], offset[1] - self.deme[1], self.deme[0] * 2,
                                      self.deme[1] * 2))
 
+    # 绘制地图上的所有物件
     def draw(self, offset):
         for i in range(len(self.exp_balls)-1, -1, -1):
             self.exp_balls[i].draw(offset)
@@ -103,6 +118,7 @@ class Map(Level):
         pass_render = chat_font.render("目标等级"+str(self.pass_level), False, (255, 255, 255))
         screen.blit(pass_render, (450, 30))
 
+    # 更新地图上的所有物品，若有物品为dead则删除物品，同时判断攻击tick，以及经验球与蛇的碰撞
     def update(self):
         for i in range(len(self.exp_balls)-1, -1, -1):
             if get_distance(self.snake.position, self.exp_balls[i].pos) < 20:
@@ -149,22 +165,30 @@ class Map(Level):
 
 
 class Level1(Map):
+    """
+    第一关，场地为200，200
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 200
         self.deme[1] = 200
         self.pass_level = 3
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 同父类
     def update(self):
         Map.update(self)
 
 
 class Level2(Map):
+    """
+    第二关，有两个大炮
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 250
@@ -175,11 +199,13 @@ class Level2(Map):
         self.objects.append(OneCanon((-310, 100)))
         self.objects.append(OneCanon((-310, -100)))
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 大炮发射炮弹
     def update(self):
         Map.update(self)
         if self.objects[0].cast:
@@ -191,6 +217,9 @@ class Level2(Map):
 
 
 class Level3(Map):
+    """
+    第三关，一个十字激光
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 300
@@ -200,11 +229,13 @@ class Level3(Map):
 
         self.objects.append(CrossCanon((-40, -40)))
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 发射十字激光
     def update(self):
         Map.update(self)
         if self.objects[0].cast:
@@ -213,6 +244,9 @@ class Level3(Map):
 
 
 class Level4(Map):
+    """
+    第四关，一个移动激光
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 350
@@ -221,11 +255,13 @@ class Level4(Map):
         self.beam_cycle = Cycle(80, 0)
         self.pass_level = 10
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 一共有八种激光移动方式，随机生成一个
     def update(self):
         Map.update(self)
         if not self.attacks:
@@ -258,6 +294,9 @@ class Level4(Map):
 
 
 class Level5(Map):
+    """
+    第五关，有一个旋转激光
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 400
@@ -266,11 +305,13 @@ class Level5(Map):
         self.count_down = 80
         self.pass_level = 10
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 在最开始延时一段时间再生成激光
     def update(self):
         Map.update(self)
         self.count_down -= 1
@@ -279,6 +320,9 @@ class Level5(Map):
 
 
 class Level6(Map):
+    """
+    第六关，有一个巨型激光
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 300
@@ -291,11 +335,13 @@ class Level6(Map):
         self.attack_countdown = 90
         self.attack_tick = self.attack_countdown
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 在激光前摇动画结束的时候生成一个巨型激光，否则根据攻击tick来生成一个前摇
     def update(self):
         Map.update(self)
 
@@ -317,6 +363,9 @@ class Level6(Map):
 
 
 class Level7(Map):
+    """
+    第七关，有四条随机横向或者竖向的激光
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 400
@@ -331,11 +380,13 @@ class Level7(Map):
 
         self.attack_cycle = Cycle(120, 0)
 
+    # 同父类
     def is_passed(self):
         if self.snake.level >= self.pass_level:
             return True
         return False
 
+    # 生成四条横向或者竖向的激光
     def update(self):
         Map.update(self)
         if self.attacking:
@@ -369,13 +420,16 @@ class Level7(Map):
 
 
 class Level8(Map):
+    """
+    第八关，每吃一个果子升一级，可以（基本上）无限玩下去
+    """
     def __init__(self, game):
         Map.__init__(self, game)
         self.deme[0] = 400
         self.deme[1] = 400
         self.per_exp = 101
         self.food_count = 20
-        self.pass_level = 9999
+        self.pass_level = 99999
 
     def is_passed(self):
         return False

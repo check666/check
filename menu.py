@@ -3,6 +3,10 @@ from cycle import *
 
 
 class RectPoint:
+    """
+    方周运动点，在pos位置以speed速度在side大小的长方形边上循环
+    用于主菜单的按钮悬浮动画
+    """
     def __init__(self, pos, speed, side):
         self.start = (pos[0], pos[1])
         self.pos = pos
@@ -10,6 +14,7 @@ class RectPoint:
         self.speed = speed
         self.side = side
 
+    # 移动这个点，在长方形周边移动
     def move(self):
         self.pos[0] += self.vel[0]
         self.pos[1] += self.vel[1]
@@ -26,11 +31,15 @@ class RectPoint:
             self.pos[1] = self.start[1] + self.side[1]
             self.vel = (-self.speed, 0)
 
+    # 获取点的位置
     def get(self):
         return self.pos
 
 
 class MainMenu:
+    """
+    主菜单，有两个按钮一个标题，均有动画
+    """
     def __init__(self):
         self.points = [-150, 0, 150, 300, 450]
         self.float_cycle = ReCycle(8, 3)
@@ -45,6 +54,7 @@ class MainMenu:
         self.con_hovered = 1
         bgs[0].play_non_stop()
 
+    # 主要进行动画更新，以及判断当前鼠标是否悬浮在某个按钮上
     def update(self):
         for i in range(5):
             self.points[i] += 2
@@ -65,6 +75,7 @@ class MainMenu:
             if 250 < env["mouse_y"] < 290:
                 self.con_hovered = 1
 
+    # 绘制当前菜单
     def draw(self):
         screen.blit(texture_lib["title_shadow"], (0, 46 + self.float_cycle.get()))
         screen.blit(texture_lib["title"], (0, 47 + self.float_cycle2.get()))
@@ -87,6 +98,7 @@ class MainMenu:
                 pygame.draw.line(screen, (255, 255, 255), self.point_set2[i].get(), self.point_set2[i+1].get())
         screen.blit(texture_lib["copyright"], (0, 0))
 
+    # 处理鼠标点击事件，call的时候根据返回的值来确定处理结果
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
             if self.hovered:
@@ -99,6 +111,9 @@ class MainMenu:
 
 
 class LevelSelect:
+    """
+    关卡选择界面，有一个地图，左右两个可拖动箭头，以及8个可点击的关卡选择点
+    """
     status_texture = (texture_lib["level_d"], texture_lib["level_p"], texture_lib["level_c"], texture_lib["level_s"])
 
     def __init__(self, level_at):
@@ -120,11 +135,13 @@ class LevelSelect:
             self.next_level()
         self.arrow_cycle = ReCycle(10, 3)
 
+    # 开启下一关
     def next_level(self):
         self.point_status[self.current_level] = 1
         self.current_level += 1
         self.point_status[self.current_level] = 2
 
+    # 绘制当前地图
     def draw(self):
         screen.blit(texture_lib["menu_route"], (-self.scroll, self.c_float))
         for i in range(len(self.level_points)):
@@ -149,6 +166,7 @@ class LevelSelect:
         if self.scroll < 450:
             screen.blit(texture_lib["right_arrow"], (550-arrow_way, 0))
 
+    # 主要更新动画，同时检测有哪个关卡点被悬浮，以及地图左右滚动
     def update(self):
         self.c_float = self.float_cycle.get()
         for i in range(len(self.level_points)):
@@ -170,6 +188,7 @@ class LevelSelect:
             if self.scroll > 450:
                 self.scroll = 450
 
+    # 根据鼠标点击来返回处理结果，-1为什么都每点到，否则返回当前点到的关卡
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
             for i in range(len(self.point_status)):
