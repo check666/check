@@ -18,15 +18,16 @@ class ChatBox:
         self.show_time = 10
         self.dead = False
         self.click_cycle = Cycle(2, 8)
+        text = text.split()
         while text:
-            self.lines.append(text[0])
+            self.lines.append((text[0] + " "))
             text = text[1:]
             flag = True
             while flag and text:
-                if chat_font.size(self.lines[-1] + text[0])[0] > self.width:
+                if chat_font.size(self.lines[-1] + text[0] + " ")[0] > self.width:
                     flag = False
                 else:
-                    self.lines[-1] += text[0]
+                    self.lines[-1] += text[0] + " "
                     text = text[1:]
         for i in range(len(self.lines)):
             self.lines[i] = chat_font.render(self.lines[i], True, (255, 255, 255))
@@ -196,7 +197,7 @@ class LevelNum:
         self.name = "level"
         self.tick = 0
         self.num = num
-        self.texture = level_font.render("关卡" + str(num), False, (0, 0, 0))
+        self.texture = level_font.render("Level" + str(num), False, (0, 0, 0))
 
     # 判断场景是否结束
     def is_ended(self):
@@ -211,11 +212,11 @@ class LevelNum:
         else:
             screen.blit(texture_lib["result_background"], (0, 0))
             if self.tick < 50:
-                screen.blit(self.texture, ((self.tick - 20) * 20 - 600 + 250, 165))
+                screen.blit(self.texture, ((self.tick - 20) * 20 - 600 + 240, 165))
             elif self.tick < 100:
-                screen.blit(self.texture, (0 + 250, 165))
+                screen.blit(self.texture, (0 + 240, 165))
             elif self.tick < 130:
-                screen.blit(self.texture, ((self.tick - 100) * 20 + 250, 165))
+                screen.blit(self.texture, ((self.tick - 100) * 20 + 240, 165))
 
     # 更新动画帧
     def update(self):

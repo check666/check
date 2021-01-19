@@ -147,8 +147,8 @@ class LevelSelect:
         for i in range(len(self.level_points)):
             screen.blit(self.status_texture[self.point_status[i]], (self.level_points[i][0] - self.scroll,
                                                                     self.level_points[i][1] + self.c_float))
-            title = chat_font.render("关卡" + str(i+1), False, (255, 255, 255))
-            title2 = chat_font.render("关卡" + str(i + 1), False, (0, 0, 0))
+            title = chat_font.render("Stage" + str(i+1), False, (255, 255, 255))
+            title2 = chat_font.render("Stage" + str(i + 1), False, (0, 0, 0))
             screen.blit(title, (self.level_points[i][0] - self.scroll + 10,
                                 self.level_points[i][1] + self.c_float + 35))
             screen.blit(title2, (self.level_points[i][0] - self.scroll + 8,

@@ -8,7 +8,7 @@ pygame.init()
 # 常用环境变量，分别是鼠标角度，x位置，y位置，以及是否按下
 env = {"mouse_direction": 0, "mouse_x": 0, "mouse_y": 0, "mouse_down": False}
 
-# 屏幕长宽，初始化屏幕
+# 屏幕长宽，初始化屏幕 , pygame.HWSURFACE | pygame.FULLSCREEN
 screen_width, screen_height = 600, 400
 screen = pygame.display.set_mode((screen_width, screen_height))
 

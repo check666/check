@@ -115,7 +115,7 @@ class Map(Level):
             screen.blit(texture_lib["danger"], (0, 0))
 
         self.draw_boarder(offset)
-        pass_render = chat_font.render("目标等级"+str(self.pass_level), False, (255, 255, 255))
+        pass_render = chat_font.render("Target:"+str(self.pass_level), False, (255, 255, 255))
         screen.blit(pass_render, (450, 30))
 
     # 更新地图上的所有物品，若有物品为dead则删除物品，同时判断攻击tick，以及经验球与蛇的碰撞
